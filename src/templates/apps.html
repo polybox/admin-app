@@ -1,0 +1,28 @@
+<section class="section container-fluid">
+    <div class="scrollable">
+        <div class="scrollable-content" ui-scroll-bottom='bottomReached()'>
+            <div class="list-group text-center">
+                <div class="list-group-item">
+                    <h1>Installed Applications</h1>
+                </div>
+                <div class="list-group-item" ng-repeat="(i, app) in installedApps" style="padding: 20px;">
+                    <div>
+                        <img src="{{app.icon}}" style="border-radius: 200px; line-height: 60px; height: 72px; border: 3px solid; opacity: .8; margin-bottom: 20px;"></img>
+                    </div>
+                    <div>
+                        <h3>{{app.name}}</h3>
+                        {{app.description}}
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <button class="btn btn-primary btn-block" ng-click="runApp(app)" ng-if="!app.running">
+                            Run
+                        </button>
+                        <button class="btn btn-danger btn-block" ng-click="stopApp(app)" ng-if="app.running">
+                            Stop
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
