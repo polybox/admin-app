@@ -23,7 +23,7 @@ angular.module('MobyOSAdmin.controllers.Main', [])
                 name: 'Spotify',
                 description: 'Spotify is a digital music service that gives you access to millions of songs.',
                 running: false,
-                icon: 'https://play.spotify.edgekey.net/site/3d4576f/images/favicon.png',
+                icon: 'http://www.iconarchive.com/download/i98446/dakirby309/simply-styled/Spotify.ico',
                 admin_location: 'http://127.0.0.1:30003'
             }
         ];

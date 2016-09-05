@@ -1,28 +1,52 @@
-<section class="section container-fluid">
-    <div class="scrollable">
-        <div class="scrollable-content" ui-scroll-bottom='bottomReached()'>
-            <div class="list-group text-center">
-                <div class="list-group-item">
-                    <h1>Installed Applications</h1>
-                </div>
-                <div class="list-group-item" ng-repeat="(i, app) in installedApps" style="padding: 20px;">
+<div ui-content-for="title">
+    <span>Installed Apps</span>
+</div>
+
+<div class="scrollable">
+    <div class="scrollable-content">
+        <div class="container-fluid section section-break">
+            <div class="row" ng-switch on="$index % 3"  ng-repeat="app in installedApps" style="padding: 20px;">
+                <div ng-switch-when="0" class="col-xs-4">
                     <div>
-                        <img src="{{app.icon}}" style="border-radius: 200px; line-height: 60px; height: 72px; border: 3px solid; opacity: .8; margin-bottom: 20px;"></img>
+                        <img src="{{installedApps[$index].icon}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
                     </div>
-                    <div>
-                        <h3>{{app.name}}</h3>
-                        {{app.description}}
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <button class="btn btn-primary btn-block" ng-click="runApp(app)" ng-if="!app.running">
-                            Run
-                        </button>
-                        <button class="btn btn-danger btn-block" ng-click="stopApp(app)" ng-if="app.running">
-                            Stop
-                        </button>
+                    <div style="text-align:center">
+                        {{installedApps[$index].name}}
                     </div>
                 </div>
+                <div ng-switch-when="0" class="col-xs-4">
+                    <div>
+                        <img src="{{installedApps[$index+1].icon}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+                    </div>
+                    <div style="text-align:center;">
+                        {{installedApps[$index+1].name}}
+                    </div>
+                </div>
+                <div ng-switch-when="0" class="col-xs-4">
+                    <div>
+                        <img src="{{installedApps[$index+2].icon}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+                    </div>
+                    <div style="text-align:center">
+                        {{installedApps[$index+2].name}}
+                    </div>
+                </div>
+
+                <!--</div>-->
+                <!--<div>-->
+                <!--<h3>{{app.name}}</h3>-->
+                <!--{{app.description}}-->
+                <!--</div>-->
+                <!--<div style="margin-top: 10px;">-->
+                <!--<button class="btn btn-primary btn-block" ng-click="runApp(app)" ng-if="!app.running">-->
+                <!--Run-->
+                <!--</button>-->
+                <!--<button class="btn btn-danger btn-block" ng-click="stopApp(app)" ng-if="app.running">-->
+                <!--Stop-->
+                <!--</button>-->
+                <!--</div>-->
             </div>
         </div>
+
     </div>
-</section>
+
+</div>
