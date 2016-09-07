@@ -216,6 +216,31 @@ gulp.task('build', function(done) {
  * Application server
  * ------------------------------------------------------------------------- */
 
+
+
+/*
+ * Build application server.
+ */
+gulp.task('server:build', function() {
+  var build = child.spawnSync('go', ['install', './server']);
+  if (build.stderr.length) {
+    var lines = build.stderr.toString()
+      .split('\n').filter(function(line) {
+        return line.length
+      });
+    for (var l in lines)
+      util.log(util.colors.red(
+        'Error (go install): ' + lines[l]
+      ));
+    notifier.notify({
+      title: 'Error (go install)',
+      message: lines
+    });
+  }
+  return build;
+});
+
+
 /*
  * Restart application server.
  */
@@ -224,7 +249,7 @@ gulp.task('server:spawn', function() {
     process.kill(-server.pid);
 
   /* Spawn application server */
-  server = child.spawn('go', ['run', 'admin.go'], {cwd: 'server', detached: true});
+  server = child.spawn('server', {cwd: 'server', detached: true});
 
   /* Pretty print server log output */
   server.stdout.on('data', function(data) {
@@ -248,7 +273,7 @@ gulp.task('server:watch', function() {
   /* Rebuild and restart application server */
   gulp.watch([
     '*/**/*.go',
-  ], ['server:spawn']);
+  ], ['server:build', 'server:spawn']);
 });
 
 
