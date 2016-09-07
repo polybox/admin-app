@@ -232,10 +232,6 @@ gulp.task('server:build', function() {
       util.log(util.colors.red(
         'Error (go install): ' + lines[l]
       ));
-    notifier.notify({
-      title: 'Error (go install)',
-      message: lines
-    });
   }
   return build;
 });
@@ -246,10 +242,10 @@ gulp.task('server:build', function() {
  */
 gulp.task('server:spawn', function() {
   if (server)
-    process.kill(-server.pid);
+    server.kill();
 
   /* Spawn application server */
-  server = child.spawn('server', {cwd: 'server', detached: true});
+  server = child.spawn('server', {cwd: 'server'});
 
   /* Pretty print server log output */
   server.stdout.on('data', function(data) {

@@ -5,9 +5,8 @@ import (
 	"net/http"
 
 	"github.com/go-zoo/bone"
+	"github.com/mobyos/admin-app/server/handlers"
 	"github.com/urfave/negroni"
-
-	"github.com/mobyos/admin/handlers"
 )
 
 func main() {
