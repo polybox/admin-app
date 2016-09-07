@@ -16,7 +16,7 @@ import (
 )
 
 func GetInstalledApps(rw http.ResponseWriter, req *http.Request) {
-	installations, err := db.GetInstallations()
+	installations, err := db.GetApplications()
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -57,9 +57,9 @@ func InstallApp(rw http.ResponseWriter, req *http.Request) {
 
 }
 
-func StartApp(rw http.ResponseWriter, req *http.Request) {
+func StartApplication(rw http.ResponseWriter, req *http.Request) {
 	appId := bone.GetValue(req, "id")
-	app, err := db.GetInstallation(appId)
+	app, err := db.GetApplication(appId)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -92,7 +92,7 @@ func StartApp(rw http.ResponseWriter, req *http.Request) {
 
 func StopApp(rw http.ResponseWriter, req *http.Request) {
 	appId := bone.GetValue(req, "id")
-	app, err := db.GetInstallation(appId)
+	app, err := db.GetApplication(appId)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -128,7 +128,7 @@ func StopApp(rw http.ResponseWriter, req *http.Request) {
 
 func DeleteApp(rw http.ResponseWriter, req *http.Request) {
 	appId := bone.GetValue(req, "id")
-	app, err := db.GetInstallation(appId)
+	app, err := db.GetApplication(appId)
 
 	if err != nil {
 		log.Println(err)

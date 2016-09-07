@@ -12,13 +12,17 @@ import (
 
 var dbPath = fmt.Sprintf("%s./db/mobyos.db", os.Getenv("DB_PATH"))
 
-func GetInstallations() ([]*types.Application, error) {
+func init() {
+	uuid.SwitchFormat(uuid.FormatHex)
+}
+
+func GetApplications() ([]*types.Application, error) {
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
-	rows, err := db.Query("select id, name from application")
+	rows, err := db.Query("select id, name, icon_url from application")
 	if err != nil {
 		return nil, err
 	}
@@ -26,13 +30,13 @@ func GetInstallations() ([]*types.Application, error) {
 
 	apps := []*types.Application{}
 	for rows.Next() {
-		var applicationId string
-		var name string
-		err = rows.Scan(&applicationId, &name)
+
+		app := types.Application{}
+		err = rows.Scan(&app.Id, &app.Name, &app.IconUrl)
 		if err != nil {
 			return nil, err
 		}
-		apps = append(apps, &types.Application{Id: applicationId, Name: name})
+		apps = append(apps, &app)
 	}
 	err = rows.Err()
 	if err != nil {
@@ -41,7 +45,7 @@ func GetInstallations() ([]*types.Application, error) {
 	return apps, nil
 }
 
-func GetInstallation(appId string) (*types.Application, error) {
+func GetApplication(appId string) (*types.Application, error) {
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return nil, err
@@ -71,7 +75,7 @@ func CreateApplication(appDesc types.AppDescriptor) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("insert into application values (?, ?, ?)", uuid.NewV5(uuid.NameSpaceURL, uuid.Name(appDesc.Name)), appDesc.Name, desc)
+	_, err = db.Exec("insert into application values (?, ?, ?,  ?)", uuid.NewV5(uuid.NameSpaceURL, uuid.Name(appDesc.Name)).String(), appDesc.Name, appDesc.IconUrl, desc)
 	if err != nil {
 		return err
 	}

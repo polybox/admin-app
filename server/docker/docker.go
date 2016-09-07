@@ -3,6 +3,7 @@ package docker
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/docker/engine-api/client"
 	ctypes "github.com/docker/engine-api/types"
@@ -51,43 +52,53 @@ func SetInstallationStatus(inst *types.Application) error {
 	return nil
 }
 
-func RunApp(appName string, appDesc types.AppDescriptor) error {
+func createAndStart(appName string, process types.Process) (string, error) {
+	cconfig := &container.Config{Image: process.Image}
+	hconfig := &container.HostConfig{}
+	if process.Ui {
+		hconfig.Binds = []string{"/tmp/.X11-unix/:/tmp/.X11-unix/"}
+		cconfig.Env = []string{fmt.Sprintf("DISPLAY=unix%s", os.Getenv("DISPLAY"))}
+	}
 
-	appContainer, err := c.ContainerCreate(context.TODO(),
-		&container.Config{Image: appDesc.Services.App.Image},
-		&container.HostConfig{},
+	if process.Sound {
+		hconfig.Devices = []container.DeviceMapping{{"/dev/snd", "/dev/snd", "rwm"}}
+	}
+
+	container, err := c.ContainerCreate(context.TODO(),
+		cconfig,
+		hconfig,
 		&network.NetworkingConfig{},
 		appName)
 
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	err = c.ContainerStart(context.TODO(), appContainer.ID, ctypes.ContainerStartOptions{})
+	err = c.ContainerStart(context.TODO(), container.ID, ctypes.ContainerStartOptions{})
 	if err != nil {
-		return err
-	}
-
-	webContainer, err := c.ContainerCreate(context.TODO(),
-		&container.Config{Image: appDesc.Services.Web.Image},
-		&container.HostConfig{},
-		&network.NetworkingConfig{},
-		fmt.Sprintf("%s_web", appName))
-
-	if err != nil {
-		rerr := removeContainer(c, appContainer.ID)
+		rerr := removeContainer(c, container.ID)
 		if rerr != nil {
-			return err
+			return "", rerr
 		}
+		return "", err
+	}
+
+	return container.ID, nil
+}
+
+func RunApp(appName string, appDesc types.AppDescriptor) error {
+
+	appId, err := createAndStart(appName, appDesc.Services.App)
+	if err != nil {
 		return err
 	}
 
-	err = c.ContainerStart(context.TODO(), webContainer.ID, ctypes.ContainerStartOptions{})
+	_, err = createAndStart(fmt.Sprintf("%s_web", appName), appDesc.Services.Remote)
 
 	if err != nil {
-		rerr := removeContainer(c, appContainer.ID)
+		rerr := removeContainer(c, appId)
 		if rerr != nil {
-			return err
+			return rerr
 		}
 		return err
 	}

@@ -14,12 +14,16 @@ import (
 
 var descriptor []byte = []byte(`
 
-name: app1
-description: "This app is amazing and it do magical stuff"
+name: "VLC"
+description: "VLC is a free and open source cross-platform multimedia player and framework that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various streaming protocols."
+icon_url: "http://i.utdstc.com/icons/256/vlc-media-player-1-0-5.png"
+remote_url: "http://localhost:8080/mobile.html"
 services:
   app:
-    image: nginx
-  web:
+    image: jess/vlc
+    ui: true
+    sound: true
+  remote:
     image: nginx
     ports:
       - "8000:8000"
@@ -35,7 +39,7 @@ func main() {
 	}
 	defer b.Close()
 
-	sqlStmt := `create table application (id text not null primary key, name text, descriptor blob);`
+	sqlStmt := `create table application (id text not null primary key, name text, icon_url text, descriptor blob);`
 	_, err = b.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
@@ -44,6 +48,7 @@ func main() {
 
 	desc := types.AppDescriptor{}
 	err = yaml.Unmarshal(descriptor, &desc)
+
 	if err != nil {
 		log.Fatal(err)
 	}
