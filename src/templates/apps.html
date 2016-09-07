@@ -7,9 +7,9 @@
         <div class="container-fluid section section-break">
             <div class="row" ng-switch on="$index % 3"  ng-repeat="app in installedApps" style="padding: 20px;">
                 <div ng-switch-when="0" class="col-xs-4">
-			<a ng-href="#/apps/{{installedApps[$index].id}}">
+			<a ng-show="installedApps[$index]" ng-href="#/apps/{{installedApps[$index].id}}">
 			    <div>
-				<img src="{{installedApps[$index].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+				<img ng-src="{{installedApps[$index].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
 			    </div>
 			    <div style="text-align:center">
 				{{installedApps[$index].name}}
@@ -17,9 +17,9 @@
 		    </a>
                 </div>
                 <div ng-switch-when="0" class="col-xs-4">
-			<a ng-href="#/apps/{{installedApps[$index+1].id}}">
+			<a ng-show="installedApps[$index+1]" ng-href="#/apps/{{installedApps[$index+1].id}}">
 			    <div>
-				<img src="{{installedApps[$index+1].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+				<img ng-src="{{installedApps[$index+1].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
 			    </div>
 			    <div style="text-align:center;">
 				{{installedApps[$index+1].name}}
@@ -27,14 +27,14 @@
 	    		</a>
                 </div>
                 <div ng-switch-when="0" class="col-xs-4">
-			<a ng-href="#/apps/{{installedApps[$index+2].id}}">
+			<a ng-show="installedApps[$index+2]" ng-href="#/apps/{{installedApps[$index+2].id}}">
 			    <div>
-				<img src="{{installedApps[$index+2].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+				<img ng-src="{{installedApps[$index+2].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
 			    </div>
 			    <div style="text-align:center">
 				{{installedApps[$index+2].name}}
 			    </div>
-	    </a>
+                        </a>
                 </div>
 
                 <!--</div>-->
