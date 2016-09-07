@@ -62,6 +62,7 @@ func createAndStart(appName string, process types.Process) (string, error) {
 
 	if process.Sound {
 		hconfig.Devices = []container.DeviceMapping{{"/dev/snd", "/dev/snd", "rwm"}}
+		hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
 	}
 
 	container, err := c.ContainerCreate(context.TODO(),
