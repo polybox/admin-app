@@ -6,7 +6,7 @@ import (
 	"os"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mobyos/admin-app/server/types"
+	"github.com/mobyos/mobyos-admin-app/server/types"
 	"github.com/twinj/uuid"
 )
 

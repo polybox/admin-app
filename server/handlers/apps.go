@@ -10,9 +10,9 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	"github.com/go-zoo/bone"
-	"github.com/mobyos/admin-app/server/db"
-	"github.com/mobyos/admin-app/server/docker"
-	"github.com/mobyos/admin-app/server/types"
+	"github.com/mobyos/mobyos-admin-app/server/db"
+	"github.com/mobyos/mobyos-admin-app/server/docker"
+	"github.com/mobyos/mobyos-admin-app/server/types"
 )
 
 func GetInstalledApps(rw http.ResponseWriter, req *http.Request) {

@@ -9,7 +9,7 @@ import (
 	ctypes "github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/container"
 	"github.com/docker/engine-api/types/network"
-	"github.com/mobyos/admin-app/server/types"
+	"github.com/mobyos/mobyos-admin-app/server/types"
 	"golang.org/x/net/context"
 )
 
