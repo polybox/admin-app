@@ -2,11 +2,11 @@ package types
 
 import yaml "gopkg.in/yaml.v2"
 
-type Installation struct {
-	Id            string
-	ApplicationId string
-	Status        string
-	Descriptor    []byte
+type Application struct {
+	Id         string
+	Name       string
+	Status     string
+	Descriptor []byte
 }
 
 type Process struct {

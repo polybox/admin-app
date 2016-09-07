@@ -2,33 +2,37 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
+	"os"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/mobyos/admin-app/server/types"
 	"github.com/twinj/uuid"
 )
 
-func GetInstallations() ([]*types.Installation, error) {
-	db, err := sql.Open("sqlite3", "./db/mobyos.db")
+var dbPath = fmt.Sprintf("%s./db/mobyos.db", os.Getenv("DB_PATH"))
+
+func GetInstallations() ([]*types.Application, error) {
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
-	rows, err := db.Query("select id, application_id from installation")
+	rows, err := db.Query("select id, name from application")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	apps := []*types.Installation{}
+	apps := []*types.Application{}
 	for rows.Next() {
-		var id string
 		var applicationId string
-		err = rows.Scan(&id, &applicationId)
+		var name string
+		err = rows.Scan(&applicationId, &name)
 		if err != nil {
 			return nil, err
 		}
-		apps = append(apps, &types.Installation{Id: id, ApplicationId: applicationId})
+		apps = append(apps, &types.Application{Id: applicationId, Name: name})
 	}
 	err = rows.Err()
 	if err != nil {
@@ -37,16 +41,16 @@ func GetInstallations() ([]*types.Installation, error) {
 	return apps, nil
 }
 
-func GetInstallation(appId string) (*types.Installation, error) {
-	db, err := sql.Open("sqlite3", "./db/mobyos.db")
+func GetInstallation(appId string) (*types.Application, error) {
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
-	row := db.QueryRow("select id, application_id, descriptor from installation where id = ?", appId)
+	row := db.QueryRow("select id, name, descriptor from application where id = ?", appId)
 
-	app := &types.Installation{}
-	err = row.Scan(&app.Id, &app.ApplicationId, &app.Descriptor)
+	app := &types.Application{}
+	err = row.Scan(&app.Id, &app.Name, &app.Descriptor)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
@@ -57,7 +61,7 @@ func GetInstallation(appId string) (*types.Installation, error) {
 }
 
 func CreateApplication(appDesc types.AppDescriptor) error {
-	db, err := sql.Open("sqlite3", "./db/mobyos.db")
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return err
 	}
@@ -67,7 +71,7 @@ func CreateApplication(appDesc types.AppDescriptor) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("insert into installation values (?, ?, ?)", uuid.NewV4().String(), appDesc.Name, desc)
+	_, err = db.Exec("insert into application values (?, ?, ?)", uuid.NewV5(uuid.NameSpaceURL, uuid.Name(appDesc.Name)), appDesc.Name, desc)
 	if err != nil {
 		return err
 	}
@@ -76,13 +80,13 @@ func CreateApplication(appDesc types.AppDescriptor) error {
 }
 
 func DeleteApplication(appId string) error {
-	db, err := sql.Open("sqlite3", "./db/mobyos.db")
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	_, err = db.Exec("delete from installation where id = (?)", appId)
+	_, err = db.Exec("delete from application where id = (?)", appId)
 	if err != nil {
 		return err
 	}

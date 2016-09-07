@@ -24,7 +24,7 @@ func init() {
 
 }
 
-func SetInstallationStatuses(installations []*types.Installation) error {
+func SetInstallationStatuses(installations []*types.Application) error {
 
 	for _, installation := range installations {
 		err := SetInstallationStatus(installation)
@@ -36,7 +36,7 @@ func SetInstallationStatuses(installations []*types.Installation) error {
 	return nil
 }
 
-func SetInstallationStatus(inst *types.Installation) error {
+func SetInstallationStatus(inst *types.Application) error {
 	container, err := c.ContainerInspect(context.TODO(), inst.Id)
 
 	if err != nil {

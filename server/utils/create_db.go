@@ -5,13 +5,17 @@ import (
 	"log"
 	"os"
 
+	yaml "gopkg.in/yaml.v2"
+
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/twinj/uuid"
+	"github.com/mobyos/admin-app/server/db"
+	"github.com/mobyos/admin-app/server/types"
 )
 
 var descriptor []byte = []byte(`
 
 name: app1
+description: "This app is amazing and it do magical stuff"
 services:
   app:
     image: nginx
@@ -25,35 +29,29 @@ services:
 func main() {
 	os.Remove("../db/mobyos.db")
 
-	db, err := sql.Open("sqlite3", "../db/mobyos.db")
+	b, err := sql.Open("sqlite3", "../db/mobyos.db")
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
+	defer b.Close()
 
-	sqlStmt := `create table installation (id text not null primary key, application_id text, descriptor blob);`
-	_, err = db.Exec(sqlStmt)
+	sqlStmt := `create table application (id text not null primary key, name text, descriptor blob);`
+	_, err = b.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)
 		return
 	}
 
-	tx, err := db.Begin()
+	desc := types.AppDescriptor{}
+	err = yaml.Unmarshal(descriptor, &desc)
 	if err != nil {
 		log.Fatal(err)
 	}
-	stmt, err := tx.Prepare("insert into installation(id, application_id, descriptor) values(?, ?, ?)")
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer stmt.Close()
 
-	app1 := uuid.NewV4()
-	_, err = stmt.Exec(app1.String(), "app1", descriptor)
+	err = db.CreateApplication(desc)
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	for i := 0; i < 100; i++ {
-	}
-	tx.Commit()
+
 }
