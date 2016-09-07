@@ -8,8 +8,8 @@ import (
 	yaml "gopkg.in/yaml.v2"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mobyos/admin-app/server/db"
-	"github.com/mobyos/admin-app/server/types"
+	"github.com/mobyos/mobyos-admin-app/server/db"
+	"github.com/mobyos/mobyos-admin-app/server/types"
 )
 
 var descriptor []byte = []byte(`
