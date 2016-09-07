@@ -17,7 +17,7 @@ module.exports = function(config) {
    * @property config.cordova
    * @type {Boolean}
    */
-  config.cordova = true;
+  config.cordova = false;
 
 
 

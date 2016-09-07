@@ -11,8 +11,9 @@ angular.module('MobyOSAdmin.controllers.Main', [])
   };
 }])
 
-.controller('MainController', ['$scope', '$window','$http', function($scope, $window, $http){
+.controller('MainController', ['$scope', '$window','$http', '$rootScope', function($scope, $window, $http, $rootScope){
   $scope.installedApps = [];
+  $scope.app = null;
 
   $http.get('/apps').then(function(response) {
     response.data.forEach(function(app) {
@@ -27,7 +28,25 @@ angular.module('MobyOSAdmin.controllers.Main', [])
     });
   }, function(response) {
   });
+
+  $scope.actions = function(app) {
+    $scope.app = app;
+    $rootScope.Ui.turnOn('modal1');
+  }
 }])
+
+.directive('ngRightClick', ['$parse', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+}])
+
 
 .controller('AppController', ['$scope', '$window','$http','$routeParams', function($scope, $window, $http, $routeParams){
   $scope.app = null;
@@ -56,5 +75,14 @@ angular.module('MobyOSAdmin.controllers.Main', [])
   $scope.openRemote = function(app) {
     $window.open(app.remote_url);
   }
+
+
+}])
+
+.controller('StoreController', ['$scope', function($scope) {
+
+}])
+
+.controller('PrefsController', ['$scope', function($scope) {
 
 }]);

@@ -5,7 +5,7 @@
 
 <div ui-content-for="leftAction">
     <span back>
-        <i class="fa fa-arrow-left"></i> Back
+        <i class="fa fa-arrow-left"></i> Apps
     </span>
 </div>
 
@@ -20,14 +20,7 @@
 			<h3>{{app.name}}</h3>
 			{{app.description}}
 		    </div>
-		    <div style="margin-top: 10px;">
-			    <button class="btn btn-primary btn-block" ng-click="runApp(app)" ng-if="!app.is_running">Run</button>
-			    <button class="btn btn-primary btn-block" ng-click="stopApp(app)" ng-if="app.is_running">Stop</button>
-			    <button class="btn btn-primary btn-block" ng-click="openRemote(app)" ng-if="app.remote_url && app.is_running">Remote</button>
-			    <button class="btn btn-primary btn-block" ng-click="bringToFront(app)" ng-if="app.is_running">Bring to front</button>
-			    <button class="btn btn-danger btn-block" ng-click="uninstallApp(app)">Uninstall</button>
-			    <button class="btn btn-primary btn-block" ng-click="updayeApp(app)" ng-if="app.has_updates">Update</button>
-		    </div>
+                    <div ng-include=" 'actions.html' "/>
 	    </div>
 
                 <!--</div>-->
