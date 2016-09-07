@@ -15,7 +15,7 @@ import (
 	"github.com/mobyos/mobyos-admin-app/server/types"
 )
 
-func GetInstalledApps(rw http.ResponseWriter, req *http.Request) {
+func GetApps(rw http.ResponseWriter, req *http.Request) {
 	installations, err := db.GetApplications()
 	if err != nil {
 		log.Println(err)
@@ -29,6 +29,30 @@ func GetInstalledApps(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	json.NewEncoder(rw).Encode(installations)
+}
+
+func GetApp(rw http.ResponseWriter, req *http.Request) {
+	appId := bone.GetValue(req, "id")
+
+	app, err := db.GetApplication(appId)
+
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	} else if app == nil {
+		rw.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	err = docker.SetInstallationStatus(app)
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(rw).Encode(app)
 }
 
 func InstallApp(rw http.ResponseWriter, req *http.Request) {
@@ -108,7 +132,7 @@ func StopApp(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if app.Status == "Not running" {
+	if !app.IsRunning {
 		rw.WriteHeader(http.StatusConflict)
 		return
 	}
@@ -146,7 +170,7 @@ func DeleteApp(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if app.Status != "Not running" {
+	if app.IsRunning {
 		// can't delete apps that are running need to stop them first
 		rw.WriteHeader(http.StatusConflict)
 		return

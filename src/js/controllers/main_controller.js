@@ -1,9 +1,9 @@
 angular.module('MobyOSAdmin.controllers.Main', [])
 
-.controller('MainController', ['$scope', '$window','$http','$location', function($scope, $window, $http, $location){
+.controller('MainController', ['$scope', '$window','$http', function($scope, $window, $http){
     $scope.installedApps = [];
 
-    $http.get('/apps/installed').then(function(response) {
+    $http.get('/apps').then(function(response) {
       response.data.forEach(function(app) {
         $scope.installedApps.push(app);
             //{
@@ -16,15 +16,33 @@ angular.module('MobyOSAdmin.controllers.Main', [])
       });
     }, function(response) {
     });
+}])
+.controller('AppController', ['$scope', '$window','$http','$routeParams', function($scope, $window, $http, $routeParams){
+    $scope.app = null;
 
+    var appId = $routeParams.id;
+
+    $http.get('/apps/' + appId).then(function(response) {
+      $scope.app = response.data;
+    }, function(response) {
+    });
 
     $scope.runApp = function(app) {
-        app.running = true;
-        $window.location.href = app.admin_location;
+	    $http.post('/apps/' + app.id + '/start').then(function(response) {
+	      $scope.app.is_running = true;
+	    }, function(response) {
+	    });
     }
 
     $scope.stopApp = function(app) {
-        app.running = false;
+	    $http.post('/apps/' + app.id + '/stop').then(function(response) {
+	      $scope.app.is_running = false;
+	    }, function(response) {
+	    });
+    }
+
+    $scope.openRemote = function(app) {
+	    $window.open(app.remote_url);
     }
 
 }]);

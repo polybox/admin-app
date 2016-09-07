@@ -51,10 +51,10 @@ func GetApplication(appId string) (*types.Application, error) {
 		return nil, err
 	}
 	defer db.Close()
-	row := db.QueryRow("select id, name, descriptor from application where id = ?", appId)
+	row := db.QueryRow("select id, name, icon_url, descriptor, description, remote_url from application where id = ?", appId)
 
 	app := &types.Application{}
-	err = row.Scan(&app.Id, &app.Name, &app.Descriptor)
+	err = row.Scan(&app.Id, &app.Name, &app.IconUrl, &app.Descriptor, &app.Description, &app.RemoteUrl)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
@@ -75,7 +75,7 @@ func CreateApplication(appDesc types.AppDescriptor) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("insert into application values (?, ?, ?,  ?)", uuid.NewV5(uuid.NameSpaceURL, uuid.Name(appDesc.Name)).String(), appDesc.Name, appDesc.IconUrl, desc)
+	_, err = db.Exec("insert into application values (?, ?, ?, ?, ?, ?)", uuid.NewV5(uuid.NameSpaceURL, uuid.Name(appDesc.Name)).String(), appDesc.Name, appDesc.IconUrl, desc, appDesc.Description, appDesc.RemoteUrl)
 	if err != nil {
 		return err
 	}

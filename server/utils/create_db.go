@@ -20,9 +20,9 @@ icon_url: "http://i.utdstc.com/icons/256/vlc-media-player-1-0-5.png"
 remote_url: "http://localhost:8080/mobile.html"
 services:
   app:
-    image: jess/vlc
-    ui: true
-    sound: true
+    image: nginx
+    ui: false
+    sound: false
   remote:
     image: nginx
     ports:
@@ -39,7 +39,7 @@ func main() {
 	}
 	defer b.Close()
 
-	sqlStmt := `create table application (id text not null primary key, name text, icon_url text, descriptor blob);`
+	sqlStmt := `create table application (id text not null primary key, name text, icon_url text, descriptor blob, description text, remote_url text);`
 	_, err = b.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)

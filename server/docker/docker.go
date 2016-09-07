@@ -41,13 +41,11 @@ func SetInstallationStatus(inst *types.Application) error {
 	container, err := c.ContainerInspect(context.TODO(), inst.Id)
 
 	if err != nil {
-		if client.IsErrNotFound(err) {
-			inst.Status = "Not running"
-		} else {
+		if !client.IsErrNotFound(err) {
 			return err
 		}
 	} else {
-		inst.Status = container.State.Status
+		inst.IsRunning = container.State.Running
 	}
 	return nil
 }
