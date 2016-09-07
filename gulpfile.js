@@ -207,7 +207,7 @@ gulp.task('watch', function () {
 ======================================*/
 
 gulp.task('build', function(done) {
-  var tasks = ['html', 'fonts', 'images', 'less', 'js'];
+  var tasks = ['html', 'fonts', 'images', 'less', 'js', 'server:build'];
   seq('clean', tasks, done);
 });
 
