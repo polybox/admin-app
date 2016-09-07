@@ -8,7 +8,7 @@ module.exports = function(config) {
    * @property config.dest
    * @type {String}
    */
-  config.dest = 'www';
+  config.dest = './server/www';
 
   /**
    * Whether to inject cordova script
@@ -51,34 +51,6 @@ module.exports = function(config) {
    */
   config.server.port = '8080';
 
-
-
-  //
-  // Weinre Remote debug server
-  //
-
-  /**
-   * Weinre server config.
-   *
-   * @type {Boolean}
-   * @property config.weinre
-   *
-   * @example Disable weinre
-   *   config.weinre = false;
-   */
-
-  /**
-   * The host name to which weinre will be bound.
-   * @type {String}
-   */
-  config.weinre.boundHost = 'localhost';
-
-
-  /**
-  * The port where weinre server will to listen.
-   * @type {String}
-   */
-  config.weinre.httpPort = 8081;
 
 
 

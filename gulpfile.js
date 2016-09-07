@@ -40,14 +40,6 @@ var config = {
     port: '8080'
   },
 
-  weinre: {
-    httpPort:     8081,
-    boundHost:    'localhost',
-    verbose:      false,
-    debug:        false,
-    readTimeout:  5,
-    deathTimeout: 15
-  }
 };
 
 if (require('fs').existsSync('./config.js')) {
@@ -64,7 +56,6 @@ if (require('fs').existsSync('./config.js')) {
 
 var gulp           = require('gulp'),
     seq            = require('run-sequence'),
-    connect        = require('gulp-connect'),
     less           = require('gulp-less'),
     uglify         = require('gulp-uglify'),
     sourcemaps     = require('gulp-sourcemaps'),
@@ -80,8 +71,12 @@ var gulp           = require('gulp'),
     ngFilesort     = require('gulp-angular-filesort'),
     streamqueue    = require('streamqueue'),
     rename         = require('gulp-rename'),
+    child          = require('child_process'),
+    util           = require('gulp-util'),
     path           = require('path');
 
+
+var server = null;
 
 /*================================================
 =            Report Errors to Console            =
@@ -108,32 +103,6 @@ gulp.task('clean', function (cb) {
 });
 
 
-/*==========================================
-=            Start a web server            =
-==========================================*/
-
-gulp.task('connect', function() {
-  if (typeof config.server === 'object') {
-    connect.server({
-      root: config.dest,
-      host: config.server.host,
-      port: config.server.port,
-      livereload: true
-    });
-  } else {
-    throw new Error('Connect is not configured');
-  }
-});
-
-
-/*==============================================================
-=            Setup live reloading on source changes            =
-==============================================================*/
-
-gulp.task('livereload', function () {
-  gulp.src(path.join(config.dest, '*.html'))
-    .pipe(connect.reload());
-});
 
 
 /*=====================================
@@ -162,9 +131,6 @@ gulp.task('fonts', function() {
 
 gulp.task('html', function() {
   var inject = [];
-  if (typeof config.weinre === 'object') {
-    inject.push('<script src="http://'+config.weinre.boundHost+':'+config.weinre.httpPort+'/target/target-script-min.js"></script>');
-  }
   if (config.cordova) {
     inject.push('<script src="cordova.js"></script>');
   }
@@ -227,28 +193,13 @@ gulp.task('js', function() {
 ===================================================================*/
 
 gulp.task('watch', function () {
-  if (typeof config.server === 'object') {
-    gulp.watch([config.dest + '/**/*'], ['livereload']);
-  }
+  gulp.start(['server:watch', 'server:spawn'])
   gulp.watch(['./src/html/**/*'], ['html']);
   gulp.watch(['./src/less/**/*'], ['less']);
   gulp.watch(['./src/js/**/*', './src/templates/**/*', config.vendor.js], ['js']);
   gulp.watch(['./src/images/**/*'], ['images']);
 });
 
-
-/*===================================================
-=            Starts a Weinre Server                 =
-===================================================*/
-
-gulp.task('weinre', function() {
-  if (typeof config.weinre === 'object') {
-    var weinre = require('./node_modules/weinre/lib/weinre');
-    weinre.run(config.weinre);
-  } else {
-    throw new Error('Weinre is not configured');
-  }
-});
 
 
 /*======================================
@@ -261,6 +212,48 @@ gulp.task('build', function(done) {
 });
 
 
+/* ----------------------------------------------------------------------------
+ * Application server
+ * ------------------------------------------------------------------------- */
+
+/*
+ * Restart application server.
+ */
+gulp.task('server:spawn', function() {
+  if (server)
+    process.kill(-server.pid);
+
+  /* Spawn application server */
+  server = child.spawn('go', ['run', 'admin.go'], {cwd: 'server', detached: true});
+
+  /* Pretty print server log output */
+  server.stdout.on('data', function(data) {
+    var lines = data.toString().split('\n')
+    for (var l in lines)
+      if (lines[l].length)
+        util.log(lines[l]);
+  });
+
+  /* Print errors to stdout */
+  server.stderr.on('data', function(data) {
+    process.stdout.write(data.toString());
+  });
+});
+
+/*
+ * Watch source for changes and restart application server.
+ */
+gulp.task('server:watch', function() {
+
+  /* Rebuild and restart application server */
+  gulp.watch([
+    '*/**/*.go',
+  ], ['server:spawn']);
+});
+
+
+
+
 /*====================================
 =            Default Task            =
 ====================================*/
@@ -268,13 +261,6 @@ gulp.task('build', function(done) {
 gulp.task('default', function(done){
   var tasks = [];
 
-  if (typeof config.weinre === 'object') {
-    tasks.push('weinre');
-  }
-
-  if (typeof config.server === 'object') {
-    tasks.push('connect');
-  }
 
   tasks.push('watch');
 
