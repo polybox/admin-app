@@ -3,22 +3,26 @@
     <span>Moby Store</span>
 </div>
 
-<div class="scrollable">
+<div class="scrollable" ui-shared-state="searchBar">
+    <ui-shared-state id="activeTab" default="1"></ui-shared-state>
+
+    <div class="btn-group justified nav-tabs">
+        <a ui-set="{'activeTab': 1}"
+           ui-class="{'active': activeTab == 1}" class="btn btn-default">Apps</a>
+
+        <a ui-set="{'activeTab': 2}"
+           ui-class="{'active': activeTab == 2}" class="btn btn-default">Games</a>
+
+        <a ui-set="{'activeTab': 3}"
+           ui-class="{'active': activeTab == 3}" class="btn btn-default">Recommended</a>
+    </div>
+    <input ng-if="Ui.active('searchBar')"
+           type="search"
+           class="form-control"
+           placeholder="Search.." />
+
     <div class="scrollable-content">
         <div class="section">
-            <ui-shared-state id="activeTab" default="1"></ui-shared-state>
-
-            <div class="btn-group justified nav-tabs">
-                <a ui-set="{'activeTab': 1}"
-                   ui-class="{'active': activeTab == 1}" class="btn btn-default">Apps</a>
-
-                <a ui-set="{'activeTab': 2}"
-                   ui-class="{'active': activeTab == 2}" class="btn btn-default">Games</a>
-
-                <a ui-set="{'activeTab': 3}"
-                   ui-class="{'active': activeTab == 3}" class="btn btn-default">Recommended</a>
-            </div>
-
             <div ui-if="activeTab == 1">
                 <h3 class="page-header">Tab 1</h3>
                 <p>{{lorem}}</p>
@@ -34,8 +38,13 @@
                 <p>{{lorem}}</p>
             </div>
 
-
         </div>
 
     </div>
+    <a class="btn btn-block btn-lg btn-primary scrollable-footer" ui-toggle="searchBar">
+        <i class="fa fa-search"></i>
+        <span ui-hide="searchBar">Show</span>
+        <span ui-show="searchBar">Hide</span>
+        Search
+    </a>
 </div>

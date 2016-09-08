@@ -1,6 +1,7 @@
 angular.module('MobyOSAdmin', [
   'ngRoute',
   'mobile-angular-ui',
+  'mobile-angular-ui.gestures',
   'MobyOSAdmin.controllers.Main'
 ])
 
