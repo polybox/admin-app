@@ -132,11 +132,6 @@ func StopApp(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	if !app.IsRunning {
-		rw.WriteHeader(http.StatusConflict)
-		return
-	}
-
 	err = docker.StopApp(app.Id)
 	if err != nil && strings.Contains(err.Error(), "No such container") {
 		log.Println(err)
