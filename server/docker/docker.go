@@ -60,7 +60,7 @@ func createAndStart(appName string, process types.Process) (string, error) {
 
 	if process.Sound {
 		hconfig.Devices = []container.DeviceMapping{{"/dev/snd", "/dev/snd", "rwm"}}
-		hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
+		hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
 	}
 
 	container, err := c.ContainerCreate(context.TODO(),
@@ -85,32 +85,38 @@ func createAndStart(appName string, process types.Process) (string, error) {
 	return container.ID, nil
 }
 
-func RunApp(appName string, appDesc types.AppDescriptor) error {
+func RunApp(app *types.Application) error {
 
-	appId, err := createAndStart(appName, appDesc.Services.App)
+	appId, err := createAndStart(app.Id, app.Descriptor.Services.App)
 	if err != nil {
 		return err
 	}
 
-	_, err = createAndStart(fmt.Sprintf("%s_web", appName), appDesc.Services.Remote)
+	if app.Descriptor.Services.Remote.Image != "" {
+		_, err = createAndStart(fmt.Sprintf("%s_web", app.Id), app.Descriptor.Services.Remote)
 
-	if err != nil {
-		rerr := removeContainer(c, appId)
-		if rerr != nil {
-			return rerr
+		if err != nil {
+			rerr := removeContainer(c, appId)
+			if rerr != nil {
+				return rerr
+			}
+			return err
 		}
-		return err
-	}
 
+	}
 	return nil
 
 }
 
-func StopApp(appName string) error {
+func StopApp(app *types.Application) error {
 
 	// try to remove both containers even though the first remove raises an error
-	err := c.ContainerRemove(context.TODO(), appName, ctypes.ContainerRemoveOptions{Force: true})
-	errWeb := c.ContainerRemove(context.TODO(), fmt.Sprintf("%s_web", appName), ctypes.ContainerRemoveOptions{Force: true})
+	err := c.ContainerRemove(context.TODO(), app.Id, ctypes.ContainerRemoveOptions{Force: true})
+
+	var errWeb error
+	if app.Descriptor.Services.Remote.Image != "" {
+		errWeb = c.ContainerRemove(context.TODO(), fmt.Sprintf("%s_web", app.Id), ctypes.ContainerRemoveOptions{Force: true})
+	}
 
 	if err != nil {
 		return err

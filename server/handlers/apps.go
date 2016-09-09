@@ -93,15 +93,13 @@ func StartApplication(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	desc := types.AppDescriptor{}
-	err = yaml.Unmarshal(app.Descriptor, &desc)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	err = docker.RunApp(app.Id, desc)
+	err = docker.RunApp(app)
 	if err != nil && strings.Contains(err.Error(), "in use") {
 		log.Println(err)
 		rw.WriteHeader(http.StatusConflict)
@@ -125,14 +123,8 @@ func StopApp(rw http.ResponseWriter, req *http.Request) {
 		rw.WriteHeader(http.StatusNotFound)
 		return
 	}
-	err = docker.SetInstallationStatus(app)
-	if err != nil {
-		log.Println(err)
-		rw.WriteHeader(http.StatusInternalServerError)
-		return
-	}
 
-	err = docker.StopApp(app.Id)
+	err = docker.StopApp(app)
 	if err != nil && strings.Contains(err.Error(), "No such container") {
 		log.Println(err)
 		rw.WriteHeader(http.StatusConflict)

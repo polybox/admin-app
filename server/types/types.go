@@ -3,13 +3,13 @@ package types
 import yaml "gopkg.in/yaml.v2"
 
 type Application struct {
-	Id          string `json:"id"`
-	Name        string `json:"name"`
-	IsRunning   bool   `json:"is_running"`
-	IconUrl     string `json:"icon_url"`
-	Descriptor  []byte `json:"-"`
-	Description string `json:"description"`
-	RemoteUrl   string `json:"remote_url,omitempty"`
+	Id          string        `json:"id"`
+	Name        string        `json:"name"`
+	IsRunning   bool          `json:"is_running"`
+	IconUrl     string        `json:"icon_url"`
+	Descriptor  AppDescriptor `json:"-"`
+	Description string        `json:"description"`
+	RemoteUrl   string        `json:"remote_url,omitempty"`
 }
 
 type Process struct {

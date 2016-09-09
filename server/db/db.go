@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 
+	yaml "gopkg.in/yaml.v2"
+
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/mobyos/mobyos-admin-app/server/types"
 	"github.com/twinj/uuid"
@@ -54,7 +56,10 @@ func GetApplication(appId string) (*types.Application, error) {
 	row := db.QueryRow("select id, name, icon_url, descriptor, description, remote_url from application where id = ?", appId)
 
 	app := &types.Application{}
-	err = row.Scan(&app.Id, &app.Name, &app.IconUrl, &app.Descriptor, &app.Description, &app.RemoteUrl)
+	var desc []byte
+	err = row.Scan(&app.Id, &app.Name, &app.IconUrl, &desc, &app.Description, &app.RemoteUrl)
+
+	err = yaml.Unmarshal(desc, &app.Descriptor)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
