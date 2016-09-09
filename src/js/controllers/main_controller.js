@@ -11,8 +11,8 @@ angular.module('MobyOSAdmin.controllers.Main', [])
   };
 }])
 
-.controller('MainController', ['$scope', '$window','$http', '$rootScope', function($scope, $window, $http, $rootScope){
-  $scope.installedApps = [];
+.controller('MainController', ['$scope', '$window','$http', '$rootScope', '$location', function($scope, $window, $http, $rootScope, $location){
+  var self = this;
   $scope.app = null;
 
 
@@ -21,30 +21,47 @@ angular.module('MobyOSAdmin.controllers.Main', [])
       app.is_running = true;
     }, function(response) {
     });
-  }
+  };
 
   this.stopApp = function(app) {
     $http.post('/apps/' + app.id + '/stop').then(function(response) {
       app.is_running = false;
     }, function(response) {
     });
-  }
+  };
 
   this.openRemote = function(app) {
     $window.open(app.remote_url);
-  }
+  };
 
-  $http.get('/apps').then(function(response) {
-    response.data.forEach(function(app) {
-      $scope.installedApps.push(app);
+
+  this.uninstallApp = function(app) {
+    $http.delete('/apps/' + app.id).then(function(response){
+      self.getApps().then(function(response) {
+        $location.path('/');
+      });
+    }, function(response){
     });
-  }, function(response) {
-  });
+  };
 
   $scope.actions = function(app) {
     $scope.app = app;
     $rootScope.Ui.turnOn('modal1');
   }
+
+  this.getApps = function() {
+    $scope.installedApps = [];
+    return $http.get('/apps').then(function(response) {
+      response.data.forEach(function(app) {
+        $scope.installedApps.push(app);
+      });
+    }, function(response) {
+    });
+  };
+
+  this.getApps();
+
+
 }])
 
 .directive('ngRightClick', ['$parse', function($parse) {

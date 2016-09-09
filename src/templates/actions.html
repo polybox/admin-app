@@ -1,8 +1,28 @@
 <div id="actions.html" style="margin-top: 10px;">
-        <button class="btn btn-primary btn-block" ng-click="mc.runApp(app)" ng-if="!app.is_running">Run</button>
-        <button class="btn btn-primary btn-block" ng-click="mc.stopApp(app)" ng-if="app.is_running">Stop</button>
-        <button class="btn btn-primary btn-block" ng-click="mc.openRemote(app)" ng-if="app.remote_url && app.is_running">Remote</button>
-        <button class="btn btn-primary btn-block" ng-click="mc.bringToFront(app)" ng-if="app.is_running">Bring to front</button>
-        <button class="btn btn-danger btn-block" ng-click="mc.uninstallApp(app)">Uninstall</button>
-        <button class="btn btn-primary btn-block" ng-click="mc.updayeApp(app)" ng-if="app.has_updates">Update</button>
+    <button class="btn btn-primary btn-block" ng-click="mc.runApp(app)" ng-if="!app.is_running">Run</button>
+    <button class="btn btn-primary btn-block" ng-click="mc.stopApp(app)" ng-if="app.is_running">Stop</button>
+    <button class="btn btn-primary btn-block" ng-click="mc.openRemote(app)" ng-if="app.remote_url && app.is_running">Remote</button>
+    <button class="btn btn-primary btn-block" ng-click="mc.bringToFront(app)" ng-if="app.is_running">Bring to front</button>
+    <button class="btn btn-danger btn-block" ui-turn-on="confirm" ui-if="!modal1">Uninstall</button>
+    <button class="btn btn-primary btn-block" ng-click="mc.updayeApp(app)" ng-if="app.has_updates">Update</button>
 </div>
+
+<div ui-if="!modal1" ui-content-for="modals">
+    <div class="modal" ui-if="confirm" ui-state='confirm'>
+        <div class="modal-backdrop in"></div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Confirm complete remomval of app {{app.name}} ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button ui-turn-off="confirm" class="btn btn-default">Close</button>
+                    <button ui-turn-off="confirm" ng-click="mc.uninstallApp(app)" class="btn btn-primary">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
