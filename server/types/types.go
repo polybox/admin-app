@@ -12,18 +12,6 @@ type Application struct {
 	RemoteUrl   string        `json:"remote_url,omitempty"`
 }
 
-type Process struct {
-	Image string
-	Ports []string
-	Ui    bool
-	Sound bool
-}
-
-type Service struct {
-	App    Process
-	Remote Process
-}
-
 type AppDescriptor struct {
 	Services    Service `yaml:"services"`
 	Name        string  `yaml:"name"`
@@ -34,4 +22,16 @@ type AppDescriptor struct {
 
 func (ad AppDescriptor) GetBytes() ([]byte, error) {
 	return yaml.Marshal(ad)
+}
+
+type Process struct {
+	Image string
+	Ports []string
+	Ui    bool
+	Sound bool
+}
+
+type Service struct {
+	App    Process
+	Remote Process
 }
