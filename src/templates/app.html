@@ -41,3 +41,21 @@
     </div>
 
 </div>
+
+
+<div ui-content-for="modals">
+    <div class="modal" ui-if="confirm" ui-state='confirm'>
+        <div class="modal-backdrop in"></div>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Confirm complete remomval of app {{app.name}} ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button ui-turn-off="confirm" class="btn btn-default">Close</button>
+                    <button ui-turn-off="confirm" ng-click="mc.uninstallApp(app)" class="btn btn-primary">Accept</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
