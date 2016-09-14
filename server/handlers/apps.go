@@ -22,7 +22,7 @@ func GetApps(rw http.ResponseWriter, req *http.Request) {
 		rw.WriteHeader(http.StatusInternalServerError)
 	}
 
-	err = docker.SetInstallationStatuses(installations)
+	err = docker.SetContainerStates(installations)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -45,7 +45,7 @@ func GetApp(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = docker.SetInstallationStatus(app)
+	err = docker.SetContainerState(app)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
@@ -150,7 +150,7 @@ func DeleteApp(rw http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	err = docker.SetInstallationStatus(app)
+	err = docker.SetContainerState(app)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)

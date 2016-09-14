@@ -9,6 +9,7 @@ import (
 	ctypes "github.com/docker/engine-api/types"
 	"github.com/docker/engine-api/types/container"
 	"github.com/docker/engine-api/types/network"
+	"github.com/docker/go-connections/nat"
 	"github.com/mobyos/mobyos-admin-app/server/types"
 	"golang.org/x/net/context"
 )
@@ -25,10 +26,10 @@ func init() {
 
 }
 
-func SetInstallationStatuses(installations []*types.Application) error {
+func SetContainerStates(installations []*types.Application) error {
 
 	for _, installation := range installations {
-		err := SetInstallationStatus(installation)
+		err := SetContainerState(installation)
 		if err != nil {
 			return err
 		}
@@ -37,7 +38,7 @@ func SetInstallationStatuses(installations []*types.Application) error {
 	return nil
 }
 
-func SetInstallationStatus(inst *types.Application) error {
+func SetContainerState(inst *types.Application) error {
 	container, err := c.ContainerInspect(context.TODO(), inst.Id)
 
 	if err != nil {
@@ -46,13 +47,26 @@ func SetInstallationStatus(inst *types.Application) error {
 		}
 	} else {
 		inst.IsRunning = container.State.Running
+		for _, v := range container.NetworkSettings.Ports {
+			inst.RemotePort = v[0].HostPort
+			break
+		}
 	}
 	return nil
 }
 
 func createAndStart(appName string, process types.Process) (string, error) {
-	cconfig := &container.Config{Image: process.Image}
-	hconfig := &container.HostConfig{}
+	cconfig := &container.Config{Image: process.Image, Cmd: process.Command, ExposedPorts: map[nat.Port]struct{}{}}
+	hconfig := &container.HostConfig{PublishAllPorts: true}
+
+	for _, portNum := range process.Ports {
+		port, err := nat.NewPort("tcp", portNum)
+		if err != nil {
+			return "", err
+		}
+		cconfig.ExposedPorts[port] = struct{}{}
+	}
+
 	if process.Ui {
 		hconfig.Binds = []string{"/tmp/.X11-unix/:/tmp/.X11-unix/"}
 		cconfig.Env = []string{fmt.Sprintf("DISPLAY=unix%s", os.Getenv("DISPLAY"))}

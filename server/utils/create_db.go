@@ -17,22 +17,21 @@ var descriptors [][]byte = [][]byte{[]byte(`
 name: "VLC"
 description: "VLC is a free and open source cross-platform multimedia player and framework that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various streaming protocols."
 icon_url: "http://i.utdstc.com/icons/256/vlc-media-player-1-0-5.png"
-remote_url: "http://localhost:8080/mobile.html"
+remote_path: "/mobile.html"
 services:
   app:
     image: jess/vlc
     ui: true
     sound: true
-  remote:
-    image: nginx
+    command: [--control=http, --http-host=0.0.0.0, --http-port=9000, --http-password=lalala]
     ports:
-      - "8000:8000"
+        - "9000"
 
 `), []byte(`
 name: "Kodi"
 description: "Kodi, the one and only media center"
 icon_url: "http://www.homemediatech.net/wp-content/uploads/2015/11/kodi-logo.png"
-remote_url: "http://localhost:8080/mobile.html"
+remote_path: "/mobile.html"
 services:
   app:
     image: marcosnils/kodi
@@ -50,7 +49,7 @@ func main() {
 	}
 	defer b.Close()
 
-	sqlStmt := `create table application (id text not null primary key, name text, icon_url text, descriptor blob, description text, remote_url text);`
+	sqlStmt := `create table application (id text not null primary key, descriptor blob);`
 	_, err = b.Exec(sqlStmt)
 	if err != nil {
 		log.Printf("%q: %s\n", err, sqlStmt)

@@ -9,14 +9,15 @@ type Application struct {
 	IconUrl     string        `json:"icon_url"`
 	Descriptor  AppDescriptor `json:"-"`
 	Description string        `json:"description"`
-	RemoteUrl   string        `json:"remote_url,omitempty"`
+	RemotePath  string        `json:"remote_path,omitempty"`
+	RemotePort  string        `json:"remote_port"`
 }
 
 type AppDescriptor struct {
 	Services    Service `yaml:"services"`
 	Name        string  `yaml:"name"`
 	IconUrl     string  `yaml:"icon_url"`
-	RemoteUrl   string  `yaml:"remote_url"`
+	RemotePath  string  `yaml:"remote_path"`
 	Description string  `yaml:"description"`
 }
 
@@ -25,10 +26,11 @@ func (ad AppDescriptor) GetBytes() ([]byte, error) {
 }
 
 type Process struct {
-	Image string
-	Ports []string
-	Ui    bool
-	Sound bool
+	Command []string
+	Image   string
+	Ports   []string
+	Ui      bool
+	Sound   bool
 }
 
 type Service struct {

@@ -31,9 +31,11 @@ angular.module('MobyOSAdmin.controllers.Main', [])
   };
 
   this.openRemote = function(app) {
-    $window.open(app.remote_url);
+    var host = $location.host();
+    var protocol = $location.protocol();
+    var remoteUrl = protocol + "://" + host + ":" + app.remote_port + app.remote_path;
+    $window.open(remoteUrl);
   };
-
 
   this.uninstallApp = function(app) {
     $http.delete('/apps/' + app.id).then(function(response){

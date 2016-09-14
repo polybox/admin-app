@@ -18,13 +18,17 @@ func init() {
 	uuid.SwitchFormat(uuid.FormatHex)
 }
 
+type Scanner interface {
+	Scan(...interface{}) error
+}
+
 func GetApplications() ([]*types.Application, error) {
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return nil, err
 	}
 	defer db.Close()
-	rows, err := db.Query("select id, name, icon_url from application")
+	rows, err := db.Query("select id, descriptor from application")
 	if err != nil {
 		return nil, err
 	}
@@ -33,12 +37,11 @@ func GetApplications() ([]*types.Application, error) {
 	apps := []*types.Application{}
 	for rows.Next() {
 
-		app := types.Application{}
-		err = rows.Scan(&app.Id, &app.Name, &app.IconUrl)
+		app, err := createApplicationFromRow(rows)
 		if err != nil {
 			return nil, err
 		}
-		apps = append(apps, &app)
+		apps = append(apps, app)
 	}
 	err = rows.Err()
 	if err != nil {
@@ -47,26 +50,39 @@ func GetApplications() ([]*types.Application, error) {
 	return apps, nil
 }
 
-func GetApplication(appId string) (*types.Application, error) {
-	db, err := sql.Open("sqlite3", dbPath)
-	if err != nil {
-		return nil, err
-	}
-	defer db.Close()
-	row := db.QueryRow("select id, name, icon_url, descriptor, description, remote_url from application where id = ?", appId)
-
+func createApplicationFromRow(row Scanner) (*types.Application, error) {
 	app := &types.Application{}
 	var desc []byte
-	err = row.Scan(&app.Id, &app.Name, &app.IconUrl, &desc, &app.Description, &app.RemoteUrl)
+	err := row.Scan(&app.Id, &desc)
 
-	err = yaml.Unmarshal(desc, &app.Descriptor)
 	if err == sql.ErrNoRows {
 		return nil, nil
 	} else if err != nil {
 		return nil, err
 	}
 
+	err = yaml.Unmarshal(desc, &app.Descriptor)
+	if err != nil {
+		return nil, err
+	}
+
+	app.Name = app.Descriptor.Name
+	app.IconUrl = app.Descriptor.IconUrl
+	app.Description = app.Descriptor.Description
+	app.RemotePath = app.Descriptor.RemotePath
+
 	return app, nil
+}
+
+func GetApplication(appId string) (*types.Application, error) {
+	db, err := sql.Open("sqlite3", dbPath)
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+	row := db.QueryRow("select id, descriptor from application where id = ?", appId)
+
+	return createApplicationFromRow(row)
 }
 
 func CreateApplication(appDesc types.AppDescriptor) error {
@@ -80,7 +96,7 @@ func CreateApplication(appDesc types.AppDescriptor) error {
 	if err != nil {
 		return err
 	}
-	_, err = db.Exec("insert into application values (?, ?, ?, ?, ?, ?)", uuid.NewV5(uuid.NameSpaceURL, uuid.Name(appDesc.Name)).String(), appDesc.Name, appDesc.IconUrl, desc, appDesc.Description, appDesc.RemoteUrl)
+	_, err = db.Exec("insert into application values (?, ?)", uuid.NewV5(uuid.NameSpaceURL, uuid.Name(appDesc.Name)).String(), desc)
 	if err != nil {
 		return err
 	}
