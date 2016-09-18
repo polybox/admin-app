@@ -31,11 +31,26 @@ services:
 name: "Kodi"
 description: "Kodi, the one and only media center"
 icon_url: "http://www.homemediatech.net/wp-content/uploads/2015/11/kodi-logo.png"
+remote_path: "/"
 services:
   app:
     image: marcosnils/kodi
     ui: true
     sound: true
+    ports:
+        - "8080"
+
+`), []byte(`
+name: "Motion"
+description: "See everything"
+icon_url: "https://cdn4.iconfinder.com/data/icons/technology-devices-1/500/security-camera-128.png"
+remote_path: "/"
+services:
+  app:
+    image: surround/rpi-motion-mmal
+    sound: true
+    ports:
+        - "8081"
 
 `)}
 
