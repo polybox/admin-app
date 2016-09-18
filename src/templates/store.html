@@ -3,7 +3,11 @@
     <span>Moby Store</span>
 </div>
 
-<div class="scrollable" ui-shared-state="searchBar">
+<div ui-content-for="navbarAction">
+        <i class="fa fa-search"></i> Search
+</div>
+
+<div class="scrollable">
     <ui-shared-state id="activeTab" default="1"></ui-shared-state>
 
     <div class="btn-group justified nav-tabs">
@@ -16,10 +20,6 @@
         <a ui-set="{'activeTab': 3}"
            ui-class="{'active': activeTab == 3}" class="btn btn-default">Recommended</a>
     </div>
-    <input ng-if="Ui.active('searchBar')"
-           type="search"
-           class="form-control"
-           placeholder="Search.." />
 
     <div class="scrollable-content">
         <div class="section">
@@ -31,6 +31,13 @@
                             <div class="card-block">
                                 <h4 class="card-title">Skype</h4>
                             </div>
+                            <div class="card-block">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xs-6 col-md-4">
@@ -39,29 +46,57 @@
                             <div class="card-block">
                                 <h4 class="card-title">Google Chrome</h4>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-md-4">
-                        <div class="card">
-                            <img class="card-img-top" src="https://es.opensuse.org/images/1/1d/Skype-icon-128x128.png" alt="Card image cap">
                             <div class="card-block">
-                                <h4 class="card-title">Skype</h4>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-6 col-md-4">
                         <div class="card">
-                            <img class="card-img-top" src="https://es.opensuse.org/images/1/1d/Skype-icon-128x128.png" alt="Card image cap">
+                            <img class="card-img-top" src="http://sofaloca.com/themes/ypanel/js/tinymce/plugins/youtube/img/Google-YouTube-128.png" alt="Card image cap">
                             <div class="card-block">
-                                <h4 class="card-title">Skype</h4>
+                                <h4 class="card-title">Youtube</h4>
+                            </div>
+                            <div class="card-block">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
                     <div class="col-xs-6 col-md-4">
                         <div class="card">
-                            <img class="card-img-top" src="https://es.opensuse.org/images/1/1d/Skype-icon-128x128.png" alt="Card image cap">
+                            <img class="card-img-top" src="https://play.spotify.edgekey.net/site/0298183/images/favicon.png" alt="Card image cap">
                             <div class="card-block">
-                                <h4 class="card-title">Skype</h4>
+                                <h4 class="card-title">Spotify</h4>
+                            </div>
+                            <div class="card-block">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-md-4">
+                        <div class="card">
+                            <img class="card-img-top" src="http://icons.iconarchive.com/icons/chrisbanks2/cold-fusion-hd/128/netflix-icon.png" alt="Card image cap">
+                            <div class="card-block">
+                                <h4 class="card-title">Netflix</h4>
+                            </div>
+                            <div class="card-block">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
                             </div>
                         </div>
                     </div>
@@ -80,10 +115,4 @@
         </div>
 
     </div>
-    <a class="btn btn-block btn-lg btn-primary scrollable-footer" ui-toggle="searchBar">
-        <i class="fa fa-search"></i>
-        <span ui-hide="searchBar">Show</span>
-        <span ui-show="searchBar">Hide</span>
-        Search
-    </a>
 </div>

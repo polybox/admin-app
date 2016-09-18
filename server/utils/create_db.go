@@ -31,7 +31,6 @@ services:
 name: "Kodi"
 description: "Kodi, the one and only media center"
 icon_url: "http://www.homemediatech.net/wp-content/uploads/2015/11/kodi-logo.png"
-remote_path: "/mobile.html"
 services:
   app:
     image: marcosnils/kodi
