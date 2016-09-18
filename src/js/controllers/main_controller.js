@@ -19,6 +19,7 @@ angular.module('MobyOSAdmin.controllers.Main', [])
   this.runApp = function(app) {
     $http.post('/apps/' + app.id + '/start').then(function(response) {
       app.is_running = true;
+      app.remote_port = response.data.remote_port;
     }, function(response) {
     });
   };

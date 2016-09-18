@@ -5,10 +5,10 @@ import (
 	"log"
 	"os"
 
-	"github.com/docker/engine-api/client"
-	ctypes "github.com/docker/engine-api/types"
-	"github.com/docker/engine-api/types/container"
-	"github.com/docker/engine-api/types/network"
+	ctypes "github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/network"
+	"github.com/docker/docker/client"
 	"github.com/docker/go-connections/nat"
 	"github.com/mobyos/mobyos-admin-app/server/types"
 	"golang.org/x/net/context"
@@ -119,6 +119,13 @@ func RunApp(app *types.Application) error {
 		}
 
 	}
+
+	// get app status before returning it to the user
+	err = SetContainerState(app)
+	if err != nil {
+		return err
+	}
+
 	return nil
 
 }

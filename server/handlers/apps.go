@@ -109,7 +109,9 @@ func StartApplication(rw http.ResponseWriter, req *http.Request) {
 		rw.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+
 	rw.WriteHeader(http.StatusCreated)
+	json.NewEncoder(rw).Encode(app)
 }
 
 func StopApp(rw http.ResponseWriter, req *http.Request) {
