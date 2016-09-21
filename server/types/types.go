@@ -31,6 +31,7 @@ type Process struct {
 	Ports   []string
 	Ui      bool
 	Sound   bool
+	Input   bool
 }
 
 type Service struct {

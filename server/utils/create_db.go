@@ -52,6 +52,19 @@ services:
     ports:
         - "8081"
 
+`), []byte(`
+name: "Retropie"
+description: "Play your favourite Arcade, home-console, and classic PC games with the minimum set-up."
+icon_url: "https://retroresolution.files.wordpress.com/2016/03/retropie_logo_300x300.png"
+remote_path: "/"
+services:
+  app:
+    image: retropie
+    sound: true
+    input: true
+    ports:
+        - "8080"
+
 `)}
 
 func main() {

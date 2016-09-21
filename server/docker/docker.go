@@ -57,7 +57,7 @@ func SetContainerState(inst *types.Application) error {
 
 func createAndStart(appName string, process types.Process) (string, error) {
 	cconfig := &container.Config{Image: process.Image, Cmd: process.Command, ExposedPorts: map[nat.Port]struct{}{}}
-	hconfig := &container.HostConfig{PublishAllPorts: true}
+	hconfig := &container.HostConfig{PublishAllPorts: true, Privileged: true}
 
 	for _, portNum := range process.Ports {
 		port, err := nat.NewPort("tcp", portNum)
@@ -74,8 +74,13 @@ func createAndStart(appName string, process types.Process) (string, error) {
 
 	if process.Sound {
 		hconfig.Devices = []container.DeviceMapping{{"/dev/snd", "/dev/snd", "rwm"}}
-		//hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
-		hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
+		hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
+		//hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
+	}
+
+	if process.Input {
+		hconfig.Binds = []string{"/dev/input:/dev/input"}
+		cconfig.Tty = true
 	}
 
 	container, err := c.ContainerCreate(context.TODO(),

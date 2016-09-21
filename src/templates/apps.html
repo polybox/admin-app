@@ -6,7 +6,7 @@
     <div class="scrollable-content">
         <div class="container-fluid section section-break">
 
-            <div class="row" ng-switch on="$index % 3"  ng-repeat="app in installedApps" style="padding: 20px;">
+            <div class="row" ng-switch on="$index % 3" ng-if="$index % 3 == 0"  ng-repeat="app in installedApps" style="padding: 20px;">
                 <div ng-switch-when="0" class="col-xs-4">
                     <a ng-right-click="actions(installedApps[$index])" ng-show="installedApps[$index]" ng-href="#/apps/{{installedApps[$index].id}}">
                         <div>
