@@ -65,6 +65,22 @@ services:
     ports:
         - "8080"
 
+`), []byte(`
+name: "Hotspot"
+description: "Share your internet connection with your guests"
+icon_url: "http://www.montclair-hostel.com/wp-content/uploads/2015/03/wifi.png"
+remote_path: "/"
+
+`), []byte(`
+name: "Secure nav"
+description: "Navigate through tor router securely"
+icon_url: "https://upload.wikimedia.org/wikipedia/commons/7/73/Tor_logo-1.png"
+remote_path: "/"
+`), []byte(`
+name: "Media server"
+description: ""
+icon_url: "https://upload.wikimedia.org/wikipedia/commons/7/73/Tor_logo-1.png"
+remote_path: "/"
 `)}
 
 func main() {
