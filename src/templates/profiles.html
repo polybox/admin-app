@@ -2,6 +2,46 @@
     <span>Profiles</span>
 </div>
 <div class="scrollable">
-    <div class="scrollable-content section">
+    <div class="scrollable-content">
+        <div class="container-fluid section section-break">
+            <div class="list-group text-center">
+                <div ui-shared-state="movies" class="list-group-item list-group-item-home"  ui-exclusion-group="profile">
+                    <div ui-toggle="movies">
+                        <i ui-class="{'text-primary': movies}" class="profile-opt fa fa-picture-o"></i>
+                    </div>
+                    <div>
+                        <h3>Movies</h3>
+                        <p>Dims the lights, and starts your favorite media center</p>
+                    </div>
+                </div>
+                <div ui-shared-state="gaming" class="list-group-item list-group-item-home" ui-exclusion-group="profile">
+                    <div ui-toggle="gaming">
+                        <i ui-class="{'text-primary': gaming}" class="profile-opt fa fa-gamepad"></i>
+                    </div>
+                    <div>
+                        <h3>Gaming</h3>
+                        <p>Opens teamspeak an your favorite gaming platform</p>
+                    </div>
+                </div>
+                <div ui-shared-state="music" class="list-group-item list-group-item-home" ui-exclusion-group="profile">
+                    <div ui-toggle="music">
+                        <i ui-class="{'text-primary': music}" class="profile-opt fa fa-music"></i>
+                    </div>
+                    <div>
+                        <h3>Music</h3>
+                        <p>Equalize your music and listen to your favorite artists</p>
+                    </div>
+                </div>
+                <div ui-shared-state="work" class="list-group-item list-group-item-home" ui-exclusion-group="profile">
+                    <div ui-toggle="work">
+                        <i ui-class="{'text-primary': work}" class="profile-opt fa fa-desktop"></i>
+                    </div>
+                    <div>
+                        <h3>Work</h3>
+                        <p>Sets up all the necessary tools for your daily work</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
     </div>
-</div>

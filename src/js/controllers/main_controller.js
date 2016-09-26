@@ -95,9 +95,10 @@ angular.module('MobyOSAdmin.controllers.Main', [])
 }])
 
 .controller('StoreController', ['$scope', function($scope) {
-
 }])
 
 .controller('PrefsController', ['$scope', function($scope) {
+}])
 
+.controller('ProfileController', ['$scope', function($scope) {
 }]);

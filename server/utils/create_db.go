@@ -72,14 +72,19 @@ icon_url: "http://www.montclair-hostel.com/wp-content/uploads/2015/03/wifi.png"
 remote_path: "/"
 
 `), []byte(`
-name: "Secure nav"
+name: "Tor router"
 description: "Navigate through tor router securely"
 icon_url: "https://upload.wikimedia.org/wikipedia/commons/7/73/Tor_logo-1.png"
 remote_path: "/"
 `), []byte(`
-name: "Media server"
-description: ""
-icon_url: "https://upload.wikimedia.org/wikipedia/commons/7/73/Tor_logo-1.png"
+name: "Mantika VPN"
+description: "Connect to company VPN"
+icon_url: "http://soporte.fen.uchile.cl/mw/images/1/18/Vpnfen.png"
+remote_path: "/"
+`), []byte(`
+name: "Metrics"
+description: "Grafana dashboards"
+icon_url: "https://demo.lightbend.com/grafana/public/img/grafana_icon.svg"
 remote_path: "/"
 `)}
 
