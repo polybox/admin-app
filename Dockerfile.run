@@ -1,0 +1,22 @@
+FROM resin/rpi-raspbian:wheezy
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    gcc \
+    libc6-dev \
+    make \
+    git \
+    --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+
+ADD https://storage.googleapis.com/golang/go1.7.1.linux-armv6l.tar.gz /go/go1.7.1.linux-armv6l.tar.gz
+RUN tar -C /usr/local -xzf /go/go1.7.1.linux-armv6l.tar.gz
+
+ENV GOPATH /gopath
+ENV GOROOT /usr/local/go
+ENV PATH $GOROOT/bin:$GOPATH/bin:$PATH
+
+ADD . /gopath/src/github.com/mobyos/mobyos-admin-app
+WORKDIR /gopath/src/github.com/mobyos/mobyos-admin-app/server
+
+CMD go get ./... && go run ./...

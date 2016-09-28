@@ -212,6 +212,10 @@ gulp.task('build', function(done) {
   seq('clean', tasks, done);
 });
 
+gulp.task('prepare', function(done) {
+  var tasks = ['html', 'fonts', 'images', 'less', 'js'];
+  seq('clean', tasks, done);
+});
 
 /* ----------------------------------------------------------------------------
  * Application server
