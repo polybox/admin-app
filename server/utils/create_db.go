@@ -14,18 +14,29 @@ import (
 
 var descriptors [][]byte = [][]byte{[]byte(`
 
-name: "VLC"
-description: "VLC is a free and open source cross-platform multimedia player and framework that plays most multimedia files as well as DVDs, Audio CDs, VCDs, and various streaming protocols."
-icon_url: "http://i.utdstc.com/icons/256/vlc-media-player-1-0-5.png"
-remote_path: "/mobile.html"
+name: "Spotify"
+description: "Music for everyone"
+icon_url: "https://play.spotify.edgekey.net/site/0298183/images/favicon.png"
+remote_path: "/musicbox_webclient"
 services:
   app:
-    image: jess/vlc
-    ui: true
+    image: mopidy
     sound: true
-    command: [--control=http, --http-host=0.0.0.0, --http-port=9000, --http-password=lalala]
     ports:
-        - "9000"
+        - "6680"
+
+`), []byte(`
+name: "Retropie"
+description: "Play your favourite Arcade, home-console, and classic PC games with the minimum set-up."
+icon_url: "https://retroresolution.files.wordpress.com/2016/03/retropie_logo_300x300.png"
+remote_path: "/"
+services:
+  app:
+    image: retropie
+    sound: true
+    input: true
+    ports:
+        - "8080"
 
 `), []byte(`
 name: "Kodi"
@@ -51,19 +62,6 @@ services:
     sound: true
     ports:
         - "8081"
-
-`), []byte(`
-name: "Retropie"
-description: "Play your favourite Arcade, home-console, and classic PC games with the minimum set-up."
-icon_url: "https://retroresolution.files.wordpress.com/2016/03/retropie_logo_300x300.png"
-remote_path: "/"
-services:
-  app:
-    image: retropie
-    sound: true
-    input: true
-    ports:
-        - "8080"
 
 `), []byte(`
 name: "Hotspot"
