@@ -3,4 +3,4 @@ FROM hypriot/rpi-alpine-scratch
 ADD . /app
 WORKDIR /app/server
 
-CMD ["server"]
+CMD ["./server"]

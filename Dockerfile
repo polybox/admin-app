@@ -22,7 +22,7 @@ RUN bower install --allow-root
 COPY server /app/src/github.com/mobyos/mobyos-admin-app/server
 WORKDIR /app/src/github.com/mobyos/mobyos-admin-app/server
 RUN go get ./...
-RUN CC=arm-linux-gnueabihf-gcc GOOS=linux GOARCH=arm GOARM=6 CGO_ENABLED=1 go build -v -o server 
+RUN CC=arm-linux-gnueabihf-gcc GOOS=linux GOARCH=arm GOARM=6 CGO_ENABLED=1 go build -a -installsuffix cgo -v -o server --ldflags '-extldflags "-static"'
 
 WORKDIR /app/src/github.com/mobyos/mobyos-admin-app/server/utils
 RUN ./run.sh
@@ -35,7 +35,7 @@ RUN gulp prepare
 RUN mkdir -p /dst/server
 RUN cp server/server /dst/server
 RUN cp -R server/db /dst/server/db
-RUN cp -R src /dst/src
+RUN cp -R www /dst/server/www
 
 COPY Dockerfile.run /dst/Dockerfile
 
