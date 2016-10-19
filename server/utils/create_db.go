@@ -16,7 +16,7 @@ var descriptors [][]byte = [][]byte{[]byte(`
 
 name: "Spotify"
 description: "Music for everyone"
-icon_url: "https://play.spotify.edgekey.net/site/0298183/images/favicon.png"
+icon_url: "http://icons.iconarchive.com/icons/osullivanluke/orb-os-x/128/Spotify-icon.png"
 remote_path: "/musicbox_webclient"
 services:
   app:
@@ -50,7 +50,8 @@ services:
     sound: true
     ports:
         - "8080"
-
+    volumes:
+        - "/root/.kodi"
 `), []byte(`
 name: "Motion"
 description: "See everything"
@@ -70,10 +71,14 @@ icon_url: "http://www.montclair-hostel.com/wp-content/uploads/2015/03/wifi.png"
 remote_path: "/"
 
 `), []byte(`
-name: "Tor router"
-description: "Navigate through tor router securely"
-icon_url: "https://upload.wikimedia.org/wikipedia/commons/7/73/Tor_logo-1.png"
+name: "BlueJeans"
+description: "BlueJeans conference"
+icon_url: "https://logo.clearbit.com/bluejeans.com"
 remote_path: "/"
+services:
+  app:
+    image: resin/rpi-raspbian
+
 `), []byte(`
 name: "Mantika VPN"
 description: "Connect to company VPN"

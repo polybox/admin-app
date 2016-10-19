@@ -2,8 +2,10 @@ package docker
 
 import (
 	"fmt"
+	"hash/fnv"
 	"log"
 	"os"
+	"strconv"
 
 	ctypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -81,6 +83,14 @@ func createAndStart(appName string, process types.Process) (string, error) {
 	if process.Input {
 		hconfig.Binds = []string{"/dev/input:/dev/input"}
 		cconfig.Tty = true
+	}
+
+	hash := fnv.New32a()
+	for _, volume := range process.Volumes {
+		hash.Write([]byte(volume))
+		volumeHash := hash.Sum32()
+		hconfig.Binds = append(hconfig.Binds, fmt.Sprintf("%s_%s:%s", appName, strconv.Itoa(int(volumeHash)), volume))
+		hash.Reset()
 	}
 
 	container, err := c.ContainerCreate(context.TODO(),

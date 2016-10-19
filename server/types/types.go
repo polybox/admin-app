@@ -32,6 +32,7 @@ type Process struct {
 	Ui      bool
 	Sound   bool
 	Input   bool
+	Volumes []string
 }
 
 type Service struct {
