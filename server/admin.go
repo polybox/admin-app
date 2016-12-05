@@ -12,8 +12,9 @@ import (
 func main() {
 	mux := bone.New()
 
+	mux.Get("/store", http.HandlerFunc(handlers.GetStoreApps))
 	mux.Get("/apps", http.HandlerFunc(handlers.GetApps))
-	mux.Post("/apps", http.HandlerFunc(handlers.InstallApp))
+	mux.Post("/apps/:name", http.HandlerFunc(handlers.InstallApp))
 	mux.Delete("/apps/:id", http.HandlerFunc(handlers.DeleteApp))
 	mux.Get("/apps/:id", http.HandlerFunc(handlers.GetApp))
 	mux.Post("/apps/:id/start", http.HandlerFunc(handlers.StartApplication))

@@ -6,7 +6,7 @@ angular.module('MobyOSAdmin', [
 ])
 
 .config(function($routeProvider) {
-  $routeProvider.when('/', {templateUrl:'apps.html',  reloadOnSearch: false});
+  $routeProvider.when('/', {templateUrl:'apps.html', controller: 'MainController',  reloadOnSearch: false});
   $routeProvider.when('/apps/:id', {templateUrl:'app.html',  controller: 'AppController', reloadOnSearch: false});
   $routeProvider.when('/store', {templateUrl:'store.html',  controller: 'StoreController', reloadOnSearch: false});
   $routeProvider.when('/profiles', {templateUrl:'profiles.html',  controller: 'ProfileController', reloadOnSearch: false});

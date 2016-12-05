@@ -1,6 +1,13 @@
 package types
 
-import yaml "gopkg.in/yaml.v2"
+import (
+	"github.com/twinj/uuid"
+	yaml "gopkg.in/yaml.v2"
+)
+
+func init() {
+	uuid.SwitchFormat(uuid.FormatHex)
+}
 
 type Application struct {
 	Id          string        `json:"id"`
@@ -14,15 +21,19 @@ type Application struct {
 }
 
 type AppDescriptor struct {
-	Services    Service `yaml:"services"`
-	Name        string  `yaml:"name"`
-	IconUrl     string  `yaml:"icon_url"`
-	RemotePath  string  `yaml:"remote_path"`
-	Description string  `yaml:"description"`
+	Services    Service `yaml:"services" json:"-"`
+	Name        string  `yaml:"name" json:"name"`
+	IconUrl     string  `yaml:"icon_url"json:"icon_url"`
+	RemotePath  string  `yaml:"remote_path"json:"remote_path"`
+	Description string  `yaml:"description"json:"description"`
 }
 
 func (ad AppDescriptor) GetBytes() ([]byte, error) {
 	return yaml.Marshal(ad)
+}
+
+func (ad AppDescriptor) GetId() string {
+	return uuid.NewV5(uuid.NameSpaceURL, uuid.Name(ad.Name)).String()
 }
 
 type Process struct {

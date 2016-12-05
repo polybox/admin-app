@@ -2,17 +2,13 @@ package handlers
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
 
-	yaml "gopkg.in/yaml.v2"
-
 	"github.com/go-zoo/bone"
 	"github.com/mobyos/mobyos-admin-app/server/db"
 	"github.com/mobyos/mobyos-admin-app/server/docker"
-	"github.com/mobyos/mobyos-admin-app/server/types"
 )
 
 func GetApps(rw http.ResponseWriter, req *http.Request) {
@@ -29,6 +25,17 @@ func GetApps(rw http.ResponseWriter, req *http.Request) {
 	}
 
 	json.NewEncoder(rw).Encode(installations)
+}
+
+func GetStoreApps(rw http.ResponseWriter, req *http.Request) {
+
+	storeApps, err := db.GetStoreApps()
+	if err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	json.NewEncoder(rw).Encode(storeApps)
 }
 
 func GetApp(rw http.ResponseWriter, req *http.Request) {
@@ -56,21 +63,8 @@ func GetApp(rw http.ResponseWriter, req *http.Request) {
 }
 
 func InstallApp(rw http.ResponseWriter, req *http.Request) {
-	appYaml, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		log.Println(err)
-		rw.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-	desc := types.AppDescriptor{}
-	err = yaml.Unmarshal(appYaml, &desc)
-	if err != nil {
-		// TODO return a meaningful error
-		rw.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	err = db.CreateApplication(desc)
+	name := bone.GetValue(req, "name")
+	err := db.CreateApplication(name)
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)

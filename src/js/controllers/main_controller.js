@@ -64,7 +64,6 @@ angular.module('MobyOSAdmin.controllers.Main', [])
 
   this.getApps();
 
-
 }])
 
 .directive('ngRightClick', ['$parse', function($parse) {
@@ -94,7 +93,26 @@ angular.module('MobyOSAdmin.controllers.Main', [])
 
 }])
 
-.controller('StoreController', ['$scope', function($scope) {
+.controller('StoreController', ['$scope', '$http', '$location', function($scope, $http, $location) {
+  $scope.storeApps = [];
+
+  $scope.installApp = function(app) {
+    return $http.post('/apps/' + app.name).then(function(response) {
+      $location.path('/');
+    }, function(response) {
+    });
+  };
+
+  this.getStoreApps = function() {
+    $scope.installedApps = [];
+    return $http.get('/store').then(function(response) {
+      response.data.forEach(function(app) {
+        $scope.storeApps.push(app);
+      });
+    }, function(response) {
+    });
+  };
+  this.getStoreApps();
 }])
 
 .controller('PrefsController', ['$scope', function($scope) {

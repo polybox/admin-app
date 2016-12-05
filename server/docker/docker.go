@@ -58,7 +58,7 @@ func SetContainerState(inst *types.Application) error {
 }
 
 func createAndStart(appName string, process types.Process) (string, error) {
-	cconfig := &container.Config{Image: process.Image, Cmd: process.Command, ExposedPorts: map[nat.Port]struct{}{}}
+	cconfig := &container.Config{Image: process.Image, Cmd: process.Command, ExposedPorts: nat.PortSet{}}
 	hconfig := &container.HostConfig{PublishAllPorts: true, Privileged: true}
 
 	for _, portNum := range process.Ports {
@@ -71,13 +71,14 @@ func createAndStart(appName string, process types.Process) (string, error) {
 
 	if process.Ui {
 		hconfig.Binds = []string{"/tmp/.X11-unix/:/tmp/.X11-unix/"}
-		cconfig.Env = []string{fmt.Sprintf("DISPLAY=unix%s", os.Getenv("DISPLAY"))}
+		cconfig.Env = []string{fmt.Sprintf("DISPLAY=unix%s", os.Getenv("DISPLAY")), "PUID=1000", "PGID=44"}
 	}
 
 	if process.Sound {
 		hconfig.Devices = []container.DeviceMapping{{"/dev/snd", "/dev/snd", "rwm"}}
-		hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
-		//hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
+		hconfig.Devices = []container.DeviceMapping{{"/dev/video0", "/dev/video0", "rwm"}}
+		//hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
+		hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
 	}
 
 	if process.Input {
