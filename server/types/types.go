@@ -18,6 +18,7 @@ type Application struct {
 	Description string        `json:"description"`
 	RemotePath  string        `json:"remote_path,omitempty"`
 	RemotePort  string        `json:"remote_port"`
+	IsLocal     bool          `json:"is_local"`
 }
 
 type AppDescriptor struct {

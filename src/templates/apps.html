@@ -10,7 +10,7 @@
                 <div ng-switch-when="0" class="col-xs-4">
                     <a ng-right-click="actions(installedApps[$index])" ng-show="installedApps[$index]" ng-href="#/apps/{{installedApps[$index].id}}">
                         <div>
-                            <img ng-src="{{installedApps[$index].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+                            <img ng-src="{{installedApps[$index].icon_url}}" style="line-height: 30px; height: 72px; margin: 5px auto; display:block;" ng-class="{'notLocal': !installedApps[$index].is_local}"></img>
                         </div>
                         <div style="text-align:center">
                             {{installedApps[$index].name}}
@@ -20,7 +20,7 @@
                 <div ng-switch-when="0" class="col-xs-4">
                     <a ng-right-click="actions(installedApps[$index+1])" ng-show="installedApps[$index+1]" ng-href="#/apps/{{installedApps[$index+1].id}}">
                         <div>
-                            <img ng-src="{{installedApps[$index+1].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+                            <img ng-src="{{installedApps[$index+1].icon_url}}" style="line-height: 30px; height: 72px; margin: 5px auto; display:block; " ng-class="{'notLocal': !installedApps[$index+1].is_local}"></img>
                         </div>
                         <div style="text-align:center;">
                             {{installedApps[$index+1].name}}
@@ -30,7 +30,7 @@
                 <div ng-switch-when="0" class="col-xs-4">
                     <a ng-right-click="actions(installedApps[$index+2])" ng-show="installedApps[$index+2]" ng-href="#/apps/{{installedApps[$index+2].id}}">
                         <div>
-                            <img ng-src="{{installedApps[$index+2].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
+                            <img ng-src="{{installedApps[$index+2].icon_url}}" style="line-height: 30px; height: 72px; margin: 5px auto; display:block;" ng-class="{'notLocal': !installedApps[$index+2].is_local}"></img>
                         </div>
                         <div style="text-align:center">
                             {{installedApps[$index+2].name}}

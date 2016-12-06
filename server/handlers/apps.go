@@ -22,6 +22,13 @@ func GetApps(rw http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if err := docker.SetApplicationsAreLocal(installations); err != nil {
+		log.Println(err)
+		rw.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	json.NewEncoder(rw).Encode(installations)

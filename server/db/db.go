@@ -116,7 +116,7 @@ icon_url: "http://icons.iconarchive.com/icons/osullivanluke/orb-os-x/128/Spotify
 remote_path: "/musicbox_webclient"
 services:
   app:
-    image: marcosnils/spotify
+    image: "marcosnils/spotify:latest"
     ui: true
     sound: true
     volumes:

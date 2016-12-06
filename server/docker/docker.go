@@ -167,6 +167,34 @@ func StopApp(app *types.Application) error {
 
 }
 
+func SetApplicationsAreLocal(apps []*types.Application) error {
+	imgs, err := c.ImageList(context.Background(), ctypes.ImageListOptions{All: true})
+	if err != nil {
+		return err
+	}
+
+	imgsIdx := map[string]bool{}
+
+	for _, i := range imgs {
+		for _, t := range i.RepoTags {
+			imgsIdx[t] = true
+		}
+
+	}
+	log.Printf("%#v\n", imgsIdx)
+
+	for _, app := range apps {
+		s := app.Descriptor.Services.App.Image
+		if imgsIdx[s] {
+			app.IsLocal = true
+		} else {
+			app.IsLocal = false
+		}
+	}
+
+	return nil
+}
+
 func removeContainer(c *client.Client, id string) error {
 	return c.ContainerRemove(context.TODO(), id, ctypes.ContainerRemoveOptions{Force: true})
 }
