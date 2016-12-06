@@ -26,7 +26,7 @@
             <div ui-if="activeTab == 1">
                 <div class="row" ng-switch on="$index % 3" ng-if="$index % 3 == 0"  ng-repeat="app in storeApps" style="padding: 20px;">
 
-                    <div ng-switch-when="0" class="col-xs-4">
+                    <div ng-switch-when="0" ng-show="storeApps[$index]" class="col-xs-4">
                         <div>
                             <img ng-src="{{storeApps[$index].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
                         </div>
@@ -35,7 +35,7 @@
                         </div>
                         <button ng-click="installApp(storeApps[$index])" class="btn btn-primary btn-block"> Install App </button>
                     </div>
-                    <div ng-switch-when="0" class="col-xs-4">
+                    <div ng-switch-when="0" ng-show="storeApps[$index + 1]" class="col-xs-4">
                         <div>
                             <img ng-src="{{storeApps[$index+1].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
                         </div>
@@ -44,7 +44,7 @@
                         </div>
                         <button ng-click="installApp(storeApps[$index+1])" class="btn btn-primary btn-block"> Install App </button>
                     </div>
-                    <div ng-switch-when="0" class="col-xs-4">
+                    <div ng-switch-when="0" ng-show="storeApps[$index + 2]" class="col-xs-4">
                         <div>
                             <img ng-src="{{storeApps[$index+2].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
                         </div>

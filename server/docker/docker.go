@@ -59,7 +59,7 @@ func SetContainerState(inst *types.Application) error {
 
 func createAndStart(appName string, process types.Process) (string, error) {
 	cconfig := &container.Config{Image: process.Image, Cmd: process.Command, ExposedPorts: nat.PortSet{}}
-	hconfig := &container.HostConfig{PublishAllPorts: true, Privileged: true}
+	hconfig := &container.HostConfig{PublishAllPorts: true}
 
 	for _, portNum := range process.Ports {
 		port, err := nat.NewPort("tcp", portNum)
@@ -71,7 +71,7 @@ func createAndStart(appName string, process types.Process) (string, error) {
 
 	if process.Ui {
 		hconfig.Binds = []string{"/tmp/.X11-unix/:/tmp/.X11-unix/"}
-		cconfig.Env = []string{fmt.Sprintf("DISPLAY=unix%s", os.Getenv("DISPLAY")), "PUID=1000", "PGID=44"}
+		cconfig.Env = []string{fmt.Sprintf("DISPLAY=unix%s", os.Getenv("DISPLAY"))}
 	}
 
 	if process.Sound {
@@ -79,6 +79,7 @@ func createAndStart(appName string, process types.Process) (string, error) {
 		hconfig.Devices = []container.DeviceMapping{{"/dev/video0", "/dev/video0", "rwm"}}
 		//hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
 		hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
+		hconfig.Binds = append(hconfig.Binds, "/run/user/1000/pulse:/run/pulse:ro")
 	}
 
 	if process.Input {

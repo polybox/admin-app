@@ -88,20 +88,25 @@ func CreateApplication(name string) error {
 	}
 	defer db.Close()
 
-	storeApp := app_descriptors[name]
-	appDesc := types.AppDescriptor{}
-	err = yaml.Unmarshal(storeApp, &appDesc)
+	if storeApp, ok := app_descriptors[name]; !ok {
+		return fmt.Errorf("Application %s not found", name)
 
-	desc, err := appDesc.GetBytes()
-	if err != nil {
-		return err
-	}
-	_, err = db.Exec("insert into application values (?, ?)", appDesc.GetId(), desc)
-	if err != nil {
-		return err
+	} else {
+		appDesc := types.AppDescriptor{}
+		err = yaml.Unmarshal(storeApp, &appDesc)
+
+		desc, err := appDesc.GetBytes()
+		if err != nil {
+			return err
+		}
+		_, err = db.Exec("insert into application values (?, ?)", appDesc.GetId(), desc)
+		if err != nil {
+			return err
+		}
+
+		return nil
 	}
 
-	return nil
 }
 
 var app_descriptors map[string][]byte = map[string][]byte{"Spotify": []byte(`
@@ -111,10 +116,11 @@ icon_url: "http://icons.iconarchive.com/icons/osullivanluke/orb-os-x/128/Spotify
 remote_path: "/musicbox_webclient"
 services:
   app:
-    image: mopidy
+    image: marcosnils/spotify
+    ui: true
     sound: true
-    ports:
-        - "6680"
+    volumes:
+        - "/home/spotify"
 `),
 	"Retropie": []byte(`
 name: "Retropie"
@@ -160,20 +166,35 @@ services:
         - "/home/nobody/media"
         - "/config"
 `),
-	"Hotspot": []byte(`
-name: "Hotspot"
+	"Blender": []byte(`
+name: "Blender"
 description: "Share your internet connection with your guests"
-icon_url: "http://www.montclair-hostel.com/wp-content/uploads/2015/03/wifi.png"
-remote_path: "/"
-`),
-	"BlueJeans": []byte(`
-name: "BlueJeans"
-description: "BlueJeans conference"
-icon_url: "https://logo.clearbit.com/bluejeans.com"
+icon_url: "http://www.picz.ge/img/s2/1402/6/d/dd5a21c5e440.png"
 remote_path: "/"
 services:
   app:
-    image: resin/rpi-raspbian
+    command: ["blender"]
+    image: marcosnils/blender
+    ui: true
+    sound: true
+    volumes:
+        - "/root/.config"
+        - "/root/projects"
+        - "/tmp"
+`),
+	"Skype": []byte(`
+name: "Skype"
+description: "Skype"
+icon_url: "http://www.fancyicons.com/free-icons/157/application/png/256/skype_256.png"
+remote_path: "/"
+services:
+  app:
+    image: sameersbn/skype
+    command: ["skype"]
+    ui: true
+    sound: true
+    volumes:
+        - "/home/skype/.Skype"
 `),
 	"Mantika VPN": []byte(`
 name: "Mantika VPN"
