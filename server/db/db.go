@@ -174,7 +174,7 @@ remote_path: "/"
 services:
   app:
     command: ["blender"]
-    image: marcosnils/blender
+    image: "marcosnils/blender:latest"
     ui: true
     sound: true
     volumes:
@@ -189,7 +189,7 @@ icon_url: "http://www.fancyicons.com/free-icons/157/application/png/256/skype_25
 remote_path: "/"
 services:
   app:
-    image: sameersbn/skype
+    image: "sameersbn/skype:latest"
     command: ["skype"]
     ui: true
     sound: true
