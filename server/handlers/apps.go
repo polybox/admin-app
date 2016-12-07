@@ -4,15 +4,24 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/go-zoo/bone"
+	"github.com/mobyos/mobyos-admin-app/server/api"
 	"github.com/mobyos/mobyos-admin-app/server/db"
 	"github.com/mobyos/mobyos-admin-app/server/docker"
+	"github.com/mobyos/mobyos-admin-app/server/types"
 )
 
 func GetApps(rw http.ResponseWriter, req *http.Request) {
-	installations, err := db.GetApplications()
+	var installations []*types.Application
+	var err error
+	if os.Getenv("UBIQ_REMOTE_API") != "" {
+		installations, err = api.GetApplications()
+	} else {
+		installations, err = db.GetApplications()
+	}
 	if err != nil {
 		log.Println(err)
 		rw.WriteHeader(http.StatusInternalServerError)

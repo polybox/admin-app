@@ -181,7 +181,6 @@ func SetApplicationsAreLocal(apps []*types.Application) error {
 		}
 
 	}
-	log.Printf("%#v\n", imgsIdx)
 
 	for _, app := range apps {
 		s := app.Descriptor.Services.App.Image

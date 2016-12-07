@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/go-zoo/bone"
 	"github.com/mobyos/mobyos-admin-app/server/handlers"
@@ -24,5 +26,9 @@ func main() {
 	n := negroni.Classic()
 	n.UseHandler(mux)
 
-	log.Fatal(http.ListenAndServe(":3000", n))
+	port := "3000"
+	if os.Getenv("UBIQ_PORT") != "" {
+		port = os.Getenv("UBIQ_PORT")
+	}
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), n))
 }
