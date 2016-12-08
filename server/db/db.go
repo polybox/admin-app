@@ -3,8 +3,11 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"hash/fnv"
 	"log"
 	"os"
+	"os/user"
+	"strconv"
 
 	yaml "gopkg.in/yaml.v2"
 
@@ -95,6 +98,10 @@ func CreateApplication(name string) error {
 		appDesc := types.AppDescriptor{}
 		err = yaml.Unmarshal(storeApp, &appDesc)
 
+		if err = createVolumeDirs(appDesc); err != nil {
+			return err
+		}
+
 		desc, err := appDesc.GetBytes()
 		if err != nil {
 			return err
@@ -106,6 +113,29 @@ func CreateApplication(name string) error {
 
 		return nil
 	}
+
+}
+
+func createVolumeDirs(desc types.AppDescriptor) error {
+	hash := fnv.New32a()
+	currentUser, _ := user.Current()
+	for _, volume := range desc.Services.App.Volumes {
+		hash.Write([]byte(volume))
+		volumeHash := hash.Sum32()
+		if err := os.MkdirAll(fmt.Sprintf("%s/.ubiq/volumes/%s_%s", currentUser.HomeDir, desc.GetId(), strconv.Itoa(int(volumeHash))), 0755); err != nil {
+			return err
+		}
+		hash.Reset()
+	}
+	for _, volume := range desc.Services.Remote.Volumes {
+		hash.Write([]byte(volume))
+		volumeHash := hash.Sum32()
+		if err := os.MkdirAll(fmt.Sprintf("%s/.ubiq/volumes/%s_%s", currentUser.HomeDir, desc.GetId(), strconv.Itoa(int(volumeHash)), volume), 0755); err != nil {
+			return err
+		}
+		hash.Reset()
+	}
+	return nil
 
 }
 

@@ -5,6 +5,7 @@ import (
 	"hash/fnv"
 	"log"
 	"os"
+	"os/user"
 	"strconv"
 
 	ctypes "github.com/docker/docker/api/types"
@@ -88,10 +89,11 @@ func createAndStart(appName string, process types.Process) (string, error) {
 	}
 
 	hash := fnv.New32a()
+	currentUser, _ := user.Current()
 	for _, volume := range process.Volumes {
 		hash.Write([]byte(volume))
 		volumeHash := hash.Sum32()
-		hconfig.Binds = append(hconfig.Binds, fmt.Sprintf("%s_%s:%s", appName, strconv.Itoa(int(volumeHash)), volume))
+		hconfig.Binds = append(hconfig.Binds, fmt.Sprintf("%s/.ubiq/volumes/%s_%s:%s", currentUser.HomeDir, appName, strconv.Itoa(int(volumeHash)), volume))
 		hash.Reset()
 	}
 
