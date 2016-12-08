@@ -194,7 +194,7 @@ gulp.task('js', function() {
 ===================================================================*/
 
 gulp.task('watch', function () {
-  gulp.start(['server:watch', 'server:spawn'])
+  gulp.start(['server:watch', 'server:spawn']);
   gulp.watch(['./src/html/**/*'], ['html']);
   gulp.watch(['./src/less/**/*'], ['less']);
   gulp.watch(['./src/js/**/*', './src/templates/**/*', config.vendor.js], ['js']);
@@ -249,8 +249,12 @@ gulp.task('server:spawn', function() {
   if (server)
     server.kill();
 
-  /* Spawn application server */
-  server = child.spawn('server', {cwd: 'server'});
+	/* Spawn application server */
+	server = child.spawn('server', {cwd: 'server'});
+
+	server.on('error', function(err) {
+  	util.log(util.colors.red('Error spawning server', err));
+	});
 
   /* Pretty print server log output */
   server.stdout.on('data', function(data) {
