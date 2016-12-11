@@ -24,129 +24,24 @@
     <div class="scrollable-content">
         <div class="section">
             <div ui-if="activeTab == 1">
-                <div class="row" ng-switch on="$index % 3" ng-if="$index % 3 == 0"  ng-repeat="app in storeApps" style="padding: 20px;">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-4 col-md-4 col-lg-3" ng-repeat="app in storeApps">
+                        <div class="card">
+                            <img class="card-img-top" ng-src="{{app.icon_url}}" alt="{{app.name}}">
+                            <div class="card-block">
+                                <h4 class="card-title">{{app.name}}</h4>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>
+                                <button ng-click="installApp(app)" class="btn btn-primary btn-block"> Install </button>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div ng-switch-when="0" ng-show="storeApps[$index]" class="col-xs-4">
-                        <div>
-                            <img ng-src="{{storeApps[$index].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
-                        </div>
-                        <div style="text-align:center">
-                            {{storeApps[$index].name}}
-                        </div>
-                        <button ng-click="installApp(storeApps[$index])" class="btn btn-primary btn-block"> Install App </button>
-                    </div>
-                    <div ng-switch-when="0" ng-show="storeApps[$index + 1]" class="col-xs-4">
-                        <div>
-                            <img ng-src="{{storeApps[$index+1].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
-                        </div>
-                        <div style="text-align:center;">
-                            {{storeApps[$index+1].name}}
-                        </div>
-                        <button ng-click="installApp(storeApps[$index+1])" class="btn btn-primary btn-block"> Install App </button>
-                    </div>
-                    <div ng-switch-when="0" ng-show="storeApps[$index + 2]" class="col-xs-4">
-                        <div>
-                            <img ng-src="{{storeApps[$index+2].icon_url}}" style="line-height: 30px; height: 72px; opacity: .8; margin: 5px auto; display:block;"></img>
-                        </div>
-                        <div style="text-align:center">
-                            {{storeApps[$index+2].name}}
-                        </div>
-                        <button ng-click="installApp(storeApps[$index+2])" class="btn btn-primary btn-block"> Install App </button>
-                    </div>
 
                 </div>
-                <!--<div class="row">-->
-                    <!--<div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">-->
-                        <!--<div class="card">-->
-                            <!--<img class="card-img-top" src="https://es.opensuse.org/images/1/1d/Skype-icon-128x128.png" alt="Card image cap">-->
-                            <!--<div class="card-block">-->
-                                <!--<h4 class="card-title">Skype</h4>-->
-                            <!--</div>-->
-                            <!--<div class="card-block">-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star-o" aria-hidden="true"></i>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">-->
-                        <!--<div class="card">-->
-                            <!--<img class="card-img-top" src="http://www.psikick.com/wp-content/themes/psikick/img/chrome.png" alt="Card image cap">-->
-                            <!--<div class="card-block">-->
-                                <!--<h4 class="card-title">Google Chrome</h4>-->
-                            <!--</div>-->
-                            <!--<div class="card-block">-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star-o" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star-o" aria-hidden="true"></i>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">-->
-                        <!--<div class="card">-->
-                            <!--<img class="card-img-top" src="http://sofaloca.com/themes/ypanel/js/tinymce/plugins/youtube/img/Google-YouTube-128.png" alt="Card image cap">-->
-                            <!--<div class="card-block">-->
-                                <!--<h4 class="card-title">Youtube</h4>-->
-                            <!--</div>-->
-                            <!--<div class="card-block">-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star-o" aria-hidden="true"></i>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">-->
-                        <!--<div class="card">-->
-                            <!--<img class="card-img-top" src="https://play.spotify.edgekey.net/site/0298183/images/favicon.png" alt="Card image cap">-->
-                            <!--<div class="card-block">-->
-                                <!--<h4 class="card-title">Spotify</h4>-->
-                            <!--</div>-->
-                            <!--<div class="card-block">-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star-o" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star-o" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star-o" aria-hidden="true"></i>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">-->
-                        <!--<div class="card">-->
-                            <!--<img class="card-img-top" src="http://icons.iconarchive.com/icons/chrisbanks2/cold-fusion-hd/128/netflix-icon.png" alt="Card image cap">-->
-                            <!--<div class="card-block">-->
-                                <!--<h4 class="card-title">Netflix</h4>-->
-                            <!--</div>-->
-                            <!--<div class="card-block">-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                    <!--<div class="col-xs-6 col-sm-4 col-md-4 col-lg-3">-->
-                        <!--<div class="card">-->
-                            <!--<img class="card-img-top" src="https://logo.clearbit.com/bluejeans.com" alt="Card image cap">-->
-                            <!--<div class="card-block">-->
-                                <!--<h4 class="card-title">BlueJeans</h4>-->
-                            <!--</div>-->
-                            <!--<div class="card-block">-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                                <!--<i class="fa fa-star" aria-hidden="true"></i>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
             </div>
             <div ui-if="activeTab == 2">
                 <div class="row">
