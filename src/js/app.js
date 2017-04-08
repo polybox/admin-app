@@ -5,6 +5,10 @@ angular.module('MobyOSAdmin', [
   'MobyOSAdmin.controllers.Main'
 ])
 
+.config(function($locationProvider) {
+  $locationProvider.hashPrefix('');
+})
+
 .config(function($routeProvider) {
   $routeProvider.when('/', {templateUrl:'apps.html', controller: 'MainController',  reloadOnSearch: false});
   $routeProvider.when('/apps/:id', {templateUrl:'app.html',  controller: 'AppController', reloadOnSearch: false});
