@@ -8,7 +8,7 @@
 
             <div class="row" ng-switch on="$index % 3" ng-if="$index % 3 == 0"  ng-repeat="app in installedApps" style="padding: 20px;">
                 <div ng-switch-when="0" class="col-xs-4">
-                    <a ng-right-click="actions(installedApps[$index])" ng-show="installedApps[$index]" ng-href="#/apps/{{installedApps[$index].id}}">
+                    <a ng-right-click="actions(installedApps[$index])" ng-show="installedApps[$index]" ng-href="{{installedApps[$index].is_local ? '#/apps/'+installedApps[$index].id : ''}}">
                         <div>
                             <img ng-src="{{installedApps[$index].icon_url}}" style="line-height: 30px; height: 72px; margin: 5px auto; display:block;" ng-class="{'notLocal': !installedApps[$index].is_local}"></img>
                         </div>
@@ -18,7 +18,7 @@
                     </a>
                 </div>
                 <div ng-switch-when="0" class="col-xs-4">
-                    <a ng-right-click="actions(installedApps[$index+1])" ng-show="installedApps[$index+1]" ng-href="#/apps/{{installedApps[$index+1].id}}">
+                    <a ng-right-click="actions(installedApps[$index+1])" ng-show="installedApps[$index+1]" ng-href="{{installedApps[$index+1].is_local ? '#/apps/'+installedApps[$index+1].id : ''}}">
                         <div>
                             <img ng-src="{{installedApps[$index+1].icon_url}}" style="line-height: 30px; height: 72px; margin: 5px auto; display:block; " ng-class="{'notLocal': !installedApps[$index+1].is_local}"></img>
                         </div>
@@ -28,7 +28,7 @@
                     </a>
                 </div>
                 <div ng-switch-when="0" class="col-xs-4">
-                    <a ng-right-click="actions(installedApps[$index+2])" ng-show="installedApps[$index+2]" ng-href="#/apps/{{installedApps[$index+2].id}}">
+                    <a ng-right-click="actions(installedApps[$index+2])" ng-show="installedApps[$index+2]" ng-href="{{installedApps[$index+2].is_local ? '#/apps/'+installedApps[$index+2].id : ''}}">
                         <div>
                             <img ng-src="{{installedApps[$index+2].icon_url}}" style="line-height: 30px; height: 72px; margin: 5px auto; display:block;" ng-class="{'notLocal': !installedApps[$index+2].is_local}"></img>
                         </div>

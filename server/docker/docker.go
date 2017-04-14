@@ -5,8 +5,8 @@ import (
 	"hash/fnv"
 	"log"
 	"os"
-	"os/user"
 	"strconv"
+	"strings"
 
 	ctypes "github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
@@ -60,7 +60,7 @@ func SetContainerState(inst *types.Application) error {
 
 func createAndStart(appName string, process types.Process) (string, error) {
 	cconfig := &container.Config{Image: process.Image, Cmd: process.Command, ExposedPorts: nat.PortSet{}}
-	hconfig := &container.HostConfig{PublishAllPorts: true}
+	hconfig := &container.HostConfig{PublishAllPorts: true, Privileged: true, AutoRemove: true}
 
 	for _, portNum := range process.Ports {
 		port, err := nat.NewPort("tcp", portNum)
@@ -77,10 +77,10 @@ func createAndStart(appName string, process types.Process) (string, error) {
 
 	if process.Sound {
 		hconfig.Devices = []container.DeviceMapping{{"/dev/snd", "/dev/snd", "rwm"}}
-		hconfig.Devices = []container.DeviceMapping{{"/dev/video0", "/dev/video0", "rwm"}}
-		//hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
-		hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
-		hconfig.Binds = append(hconfig.Binds, "/run/user/1000/pulse:/run/pulse:ro")
+		//hconfig.Devices = []container.DeviceMapping{{"/dev/video0", "/dev/video0", "rwm"}}
+		hconfig.Devices = []container.DeviceMapping{{"/dev/vchiq", "/dev/vchiq", "rwm"}}
+		//hconfig.Devices = []container.DeviceMapping{{"/dev/dri", "/dev/dri", "rwm"}}
+		//hconfig.Binds = append(hconfig.Binds, "/run/user/1000/pulse:/run/pulse:ro")
 	}
 
 	if process.Input {
@@ -89,11 +89,11 @@ func createAndStart(appName string, process types.Process) (string, error) {
 	}
 
 	hash := fnv.New32a()
-	currentUser, _ := user.Current()
 	for _, volume := range process.Volumes {
 		hash.Write([]byte(volume))
 		volumeHash := hash.Sum32()
-		hconfig.Binds = append(hconfig.Binds, fmt.Sprintf("%s/.ubiq/volumes/%s_%s:%s", currentUser.HomeDir, appName, strconv.Itoa(int(volumeHash)), volume))
+		fmt.Println("lalala", appName, volumeHash)
+		hconfig.Binds = append(hconfig.Binds, fmt.Sprintf("%s_%s:%s", appName, strconv.Itoa(int(volumeHash)), volume))
 		hash.Reset()
 	}
 
@@ -179,7 +179,8 @@ func SetApplicationsAreLocal(apps []*types.Application) error {
 
 	for _, i := range imgs {
 		for _, t := range i.RepoTags {
-			imgsIdx[t] = true
+			imgName := strings.Split(t, ":")[0]
+			imgsIdx[imgName] = true
 		}
 
 	}

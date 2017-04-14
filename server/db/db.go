@@ -3,11 +3,8 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"hash/fnv"
 	"log"
 	"os"
-	"os/user"
-	"strconv"
 
 	yaml "gopkg.in/yaml.v2"
 
@@ -98,9 +95,9 @@ func CreateApplication(name string) error {
 		appDesc := types.AppDescriptor{}
 		err = yaml.Unmarshal(storeApp, &appDesc)
 
-		if err = createVolumeDirs(appDesc); err != nil {
-			return err
-		}
+		//if err = createVolumeDirs(appDesc); err != nil {
+		//return err
+		//}
 
 		desc, err := appDesc.GetBytes()
 		if err != nil {
@@ -116,28 +113,28 @@ func CreateApplication(name string) error {
 
 }
 
-func createVolumeDirs(desc types.AppDescriptor) error {
-	hash := fnv.New32a()
-	currentUser, _ := user.Current()
-	for _, volume := range desc.Services.App.Volumes {
-		hash.Write([]byte(volume))
-		volumeHash := hash.Sum32()
-		if err := os.MkdirAll(fmt.Sprintf("%s/.ubiq/volumes/%s_%s", currentUser.HomeDir, desc.GetId(), strconv.Itoa(int(volumeHash))), 0755); err != nil {
-			return err
-		}
-		hash.Reset()
-	}
-	for _, volume := range desc.Services.Remote.Volumes {
-		hash.Write([]byte(volume))
-		volumeHash := hash.Sum32()
-		if err := os.MkdirAll(fmt.Sprintf("%s/.ubiq/volumes/%s_%s", currentUser.HomeDir, desc.GetId(), strconv.Itoa(int(volumeHash)), volume), 0755); err != nil {
-			return err
-		}
-		hash.Reset()
-	}
-	return nil
+//func createVolumeDirs(desc types.AppDescriptor) error {
+//hash := fnv.New32a()
+//currentUser, _ := user.Current()
+//for _, volume := range desc.Services.App.Volumes {
+//hash.Write([]byte(volume))
+//volumeHash := hash.Sum32()
+//if err := os.MkdirAll(fmt.Sprintf("%s/.ubiq/volumes/%s_%s", currentUser.HomeDir, desc.GetId(), strconv.Itoa(int(volumeHash))), 0755); err != nil {
+//return err
+//}
+//hash.Reset()
+//}
+//for _, volume := range desc.Services.Remote.Volumes {
+//hash.Write([]byte(volume))
+//volumeHash := hash.Sum32()
+//if err := os.MkdirAll(fmt.Sprintf("%s/.ubiq/volumes/%s_%s", currentUser.HomeDir, desc.GetId(), strconv.Itoa(int(volumeHash)), volume), 0755); err != nil {
+//return err
+//}
+//hash.Reset()
+//}
+//return nil
 
-}
+//}
 
 var app_descriptors map[string][]byte = map[string][]byte{"Spotify": []byte(`
 name: "Spotify"
@@ -146,11 +143,10 @@ icon_url: "http://icons.iconarchive.com/icons/osullivanluke/orb-os-x/128/Spotify
 remote_path: "/musicbox_webclient"
 services:
   app:
-    image: "marcosnils/spotify:latest"
-    ui: true
+    image: mopidy
     sound: true
-    volumes:
-        - "/home/spotify"
+    ports:
+        - "6680"
 `),
 	"Retropie": []byte(`
 name: "Retropie"
@@ -160,10 +156,13 @@ remote_path: "/"
 services:
   app:
     image: retropie
+    command: ["/start.sh"]
     sound: true
     input: true
     ports:
         - "8080"
+    volumes:
+        - "/opt/retropie"
 `),
 	"Kodi": []byte(`
 name: "Kodi"
@@ -196,35 +195,17 @@ services:
         - "/home/nobody/media"
         - "/config"
 `),
-	"Blender": []byte(`
-name: "Blender"
+	"Hotspot": []byte(`
+name: "Hotspot"
 description: "Share your internet connection with your guests"
-icon_url: "http://www.picz.ge/img/s2/1402/6/d/dd5a21c5e440.png"
+icon_url: "http://www.montclair-hostel.com/wp-content/uploads/2015/03/wifi.png"
 remote_path: "/"
-services:
-  app:
-    command: ["blender"]
-    image: "marcosnils/blender:latest"
-    ui: true
-    sound: true
-    volumes:
-        - "/root/.config"
-        - "/root/projects"
-        - "/tmp"
 `),
-	"Skype": []byte(`
-name: "Skype"
-description: "Skype"
-icon_url: "http://www.fancyicons.com/free-icons/157/application/png/256/skype_256.png"
+	"BlueJeans": []byte(`
+name: "BlueJeans"
+description: "BlueJeans conference"
+icon_url: "https://logo.clearbit.com/bluejeans.com"
 remote_path: "/"
-services:
-  app:
-    image: "sameersbn/skype:latest"
-    command: ["skype"]
-    ui: true
-    sound: true
-    volumes:
-        - "/home/skype/.Skype"
 `),
 	"Mantika VPN": []byte(`
 name: "Mantika VPN"
