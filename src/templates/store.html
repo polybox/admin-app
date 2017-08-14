@@ -1,16 +1,16 @@
 
 <div ui-content-for="title">
-    <span>Moby Store</span>
+    <span>Polybox Store</span>
 </div>
 
 <div ui-content-for="navbarAction">
-    <i class="fa fa-search"></i> Search
+    <i class="fa fa-search"></i>
 </div>
 
 <div class="scrollable">
     <ui-shared-state id="activeTab" default="1"></ui-shared-state>
 
-    <div class="btn-group justified nav-tabs">
+    <!--div class="btn-group justified nav-tabs">
         <a ui-set="{'activeTab': 1}"
            ui-class="{'active': activeTab == 1}" class="btn btn-default">Apps</a>
 
@@ -18,10 +18,10 @@
            ui-class="{'active': activeTab == 2}" class="btn btn-default">Games</a>
 
         <a ui-set="{'activeTab': 3}"
-           ui-class="{'active': activeTab == 3}" class="btn btn-default">Recommended</a>
-    </div>
+           ui-class="{'active': activeTab == 3}" class="btn btn-default">Featured</a>
+    </div-->
 
-    <div class="scrollable-content">
+    <div class="scrollable-content mobysection">
         <div class="section">
             <div ui-if="activeTab == 1">
                 <div class="row">

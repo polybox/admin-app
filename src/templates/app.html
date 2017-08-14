@@ -10,7 +10,7 @@
 </div>
 
 <div class="scrollable">
-    <div class="scrollable-content">
+    <div class="scrollable-content mobysection">
 	<div class="list-group text-center">
 	    <div class="list-group-item list-group-item-home">
 		    <div>
@@ -36,11 +36,11 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <p>Confirm complete remomval of app {{app.name}} ?</p>
+                    <p>Are you sure you want to completly remove your {{app.name}} app?</p>
                 </div>
                 <div class="modal-footer">
-                    <button ui-turn-off="confirm" class="btn btn-default">Close</button>
-                    <button ui-turn-off="confirm" ng-click="mc.uninstallApp(app)" class="btn btn-primary">Accept</button>
+                    <button ui-turn-off="confirm" class="btn btn-default">No</button>
+                    <button ui-turn-off="confirm" ng-click="mc.uninstallApp(app)" class="btn btn-primary">Yes</button>
                 </div>
             </div>
         </div>

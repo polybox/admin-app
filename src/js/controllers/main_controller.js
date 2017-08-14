@@ -119,4 +119,7 @@ angular.module('MobyOSAdmin.controllers.Main', [])
 }])
 
 .controller('ProfileController', ['$scope', function($scope) {
+}])
+
+.controller('AboutController', ['$scope', function($scope) {
 }]);

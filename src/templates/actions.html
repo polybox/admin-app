@@ -2,7 +2,7 @@
     <button class="btn btn-primary btn-block" ng-click="mc.runApp(app)" ng-if="!app.is_running">Run</button>
     <button class="btn btn-primary btn-block" ng-click="mc.stopApp(app)" ng-if="app.is_running">Stop</button>
     <button class="btn btn-primary btn-block" ng-click="mc.openRemote(app)" ng-if="app.remote_path && app.is_running">Remote</button>
-    <!--<button class="btn btn-primary btn-block" ng-click="mc.bringToFront(app)" ng-if="app.is_running">Bring to front</button>-->
+    <button class="btn btn-primary btn-block" ng-click="mc.bringToFront(app)" ng-if="app.is_running">Bring to front</button>
     <button class="btn btn-danger btn-block" ui-turn-on="confirm" ui-if="!modal1">Uninstall</button>
     <button class="btn btn-primary btn-block" ng-click="mc.updayeApp(app)" ng-if="app.has_updates">Update</button>
 </div>
